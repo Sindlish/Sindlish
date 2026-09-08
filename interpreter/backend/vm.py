@@ -306,6 +306,9 @@ class VM:
     def run(self) -> None:
         try:
             dispatch = self._dispatch
+            frame_changers = frozenset(
+                (OpCode.CALL_FUNCTION, OpCode.CALL_VALUE, OpCode.RETURN_VALUE)
+            )
             while self.frames:
                 frame = self.frames[-1]
                 # The active frame may change under a CALL/RETURN handler, so
@@ -325,9 +328,9 @@ class VM:
                         line_col[pc] if 0 <= pc < n_line else (0, 0)
                     )
                     dispatch[opcode](frame, arg, line, column)
-                    pc = frame.ip
-                    if self.frames[-1] is not frame:
+                    if opcode in frame_changers and self.frames[-1] is not frame:
                         break
+                    pc = frame.ip
                 else:
                     if len(self.frames) == 1:
                         break
