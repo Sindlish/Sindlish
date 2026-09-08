@@ -172,6 +172,10 @@ class Compiler:
         self.fn_stack: list[FunctionNode] = (
             []
         )  # FunctionNode context chain for closure resolution
+        # ``(type, value) -> index`` for constants carrying a hashable ``.value``
+        # (numbers, strings). Keeps ``add_const`` dedupe O(1) instead of a
+        # linear scan of the pool per insert.
+        self._const_index: dict[tuple[type, object], int] = {}
 
     def _deref_index(self, depth: int, name: str) -> int:
         """Return the index of free variable ``(depth, name)`` in the cell table."""
@@ -219,6 +223,21 @@ class Compiler:
         content equality for ``SdShey`` objects (e.g. two ``SdNumber(5)`` share
         one slot).
         """
+        inner = getattr(value, "value", None)
+        if inner is not None:
+            try:
+                hash(inner)
+            except TypeError:
+                pass
+            else:
+                key = (type(value), inner)
+                idx = self._const_index.get(key)
+                if idx is not None:
+                    return idx
+                idx = len(self.constants)
+                self.constants.append(value)
+                self._const_index[key] = idx
+                return idx
         for i, existing in enumerate(self.constants):
             if type(existing) is not type(value):
                 continue
