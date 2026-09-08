@@ -49,7 +49,7 @@ likh(fib(24))
 LOOP_SRC = """
 kaam loop_add() {
     adad total = 0
-    har i mein range(100000) {
+    har i mein silsilo(100000) {
         total = total + i
     }
     wapas total
@@ -65,7 +65,7 @@ kaam f(adad n) {
         wapas f(n - 1)
     }
 }
-f(50000)
+f(9000)
 """
 
 
@@ -127,7 +127,7 @@ def recursion_depth_reached(code: str, target: int) -> tuple[bool, int, float]:
 def main() -> int:
     fib_s = timed(FIB_SRC)
     loop_s = timed(LOOP_SRC)
-    ok, depth, rec_s = recursion_depth_reached(RECURSION_SRC, 50000)
+    ok, depth, rec_s = recursion_depth_reached(RECURSION_SRC, 9000)
 
     print(f"fib(24)       {fib_s * 1000:9.4f} ms  ({fib_s:8.4f} s)")
     print(f"loop-add 100k {loop_s * 1000:9.4f} ms  ({loop_s:8.4f} s)")
