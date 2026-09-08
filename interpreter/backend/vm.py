@@ -315,12 +315,14 @@ class VM:
                 # end of its instruction list.
                 instructions = frame.instructions
                 line_col = frame.line_col_map
+                n_instr = len(instructions)
+                n_line = len(line_col)
                 pc = frame.ip
-                while pc < len(instructions):
+                while pc < n_instr:
                     opcode, arg = instructions[pc]
                     frame.ip = pc + 1
                     line, column = (
-                        line_col[pc] if 0 <= pc < len(line_col) else (0, 0)
+                        line_col[pc] if 0 <= pc < n_line else (0, 0)
                     )
                     dispatch[opcode](frame, arg, line, column)
                     pc = frame.ip
