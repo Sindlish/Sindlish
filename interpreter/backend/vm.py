@@ -160,6 +160,21 @@ class VM:
             self._raise_from_result(val, line, column)
         return val
 
+    def _pop_pair(self, line: int, column: int) -> tuple[object, object]:
+        """Pop ``(left, right)`` operands, unwrapping only when wrapped.
+
+        Most arithmetic/comparison operands are plain values, so the common
+        path is a single list pop each; ``_unwrap_val`` (a method call) is only
+        invoked on the rare ``SdResult`` operand.
+        """
+        right = self.stack.pop()
+        left = self.stack.pop()
+        if isinstance(right, SdResult):
+            right = self._unwrap_val(right, line, column)
+        if isinstance(left, SdResult):
+            left = self._unwrap_val(left, line, column)
+        return left, right
+
     def _check_type(
         self,
         value: object,
@@ -305,10 +320,32 @@ class VM:
 
     def run(self) -> None:
         try:
+            dispatch = self._dispatch
+            frame_changers = frozenset(
+                (OpCode.CALL_FUNCTION, OpCode.CALL_VALUE, OpCode.RETURN_VALUE)
+            )
             while self.frames:
                 frame = self.frames[-1]
-                if frame.ip < len(frame.instructions):
-                    self.step()
+                # The active frame may change under a CALL/RETURN handler, so
+                # the loop re-synchronises to ``self.frames[-1]`` whenever the
+                # running frame is no longer the top of the stack. A frame is
+                # only popped once its own instruction pointer runs past the
+                # end of its instruction list.
+                instructions = frame.instructions
+                line_col = frame.line_col_map
+                n_instr = len(instructions)
+                n_line = len(line_col)
+                pc = frame.ip
+                while pc < n_instr:
+                    opcode, arg = instructions[pc]
+                    frame.ip = pc + 1
+                    line, column = (
+                        line_col[pc] if 0 <= pc < n_line else (0, 0)
+                    )
+                    dispatch[opcode](frame, arg, line, column)
+                    if opcode in frame_changers and self.frames[-1] is not frame:
+                        break
+                    pc = frame.ip
                 else:
                     if len(self.frames) == 1:
                         break
@@ -527,8 +564,7 @@ class VM:
 
     def _op_binary_add(self, frame: BytecodeFrame, arg: object, line: int, column: int) -> None:
         """Pop ``left`` and ``right``; push ``left + right`` (others: see dunder)."""
-        right = self._unwrap_val(self.stack.pop(), line, column)
-        left = self._unwrap_val(self.stack.pop(), line, column)
+        left, right = self._pop_pair(line, column)
         if isinstance(left, SdNumber) and isinstance(right, SdNumber):
             self.stack.append(SdNumber(left.value + right.value))
         else:
@@ -538,8 +574,7 @@ class VM:
 
     def _op_binary_sub(self, frame: BytecodeFrame, arg: object, line: int, column: int) -> None:
         """Pop ``left`` and ``right``; push ``left - right`` (others: see dunder)."""
-        right = self._unwrap_val(self.stack.pop(), line, column)
-        left = self._unwrap_val(self.stack.pop(), line, column)
+        left, right = self._pop_pair(line, column)
         if isinstance(left, SdNumber) and isinstance(right, SdNumber):
             self.stack.append(SdNumber(left.value - right.value))
         else:
@@ -549,8 +584,7 @@ class VM:
 
     def _op_binary_mul(self, frame: BytecodeFrame, arg: object, line: int, column: int) -> None:
         """Pop ``left`` and ``right``; push ``left * right`` (others: see dunder)."""
-        right = self._unwrap_val(self.stack.pop(), line, column)
-        left = self._unwrap_val(self.stack.pop(), line, column)
+        left, right = self._pop_pair(line, column)
         if isinstance(left, SdNumber) and isinstance(right, SdNumber):
             self.stack.append(SdNumber(left.value * right.value))
         else:
@@ -560,8 +594,7 @@ class VM:
 
     def _op_binary_div(self, frame: BytecodeFrame, arg: object, line: int, column: int) -> None:
         """Pop ``left`` and ``right``; push ``left / right`` (others: see dunder)."""
-        right = self._unwrap_val(self.stack.pop(), line, column)
-        left = self._unwrap_val(self.stack.pop(), line, column)
+        left, right = self._pop_pair(line, column)
         if (
             isinstance(left, SdNumber)
             and isinstance(right, SdNumber)
@@ -575,8 +608,7 @@ class VM:
 
     def _op_binary_pow(self, frame: BytecodeFrame, arg: object, line: int, column: int) -> None:
         """Pop ``left`` and ``right``; push ``left ** right`` (others: see dunder)."""
-        right = self._unwrap_val(self.stack.pop(), line, column)
-        left = self._unwrap_val(self.stack.pop(), line, column)
+        left, right = self._pop_pair(line, column)
         if isinstance(left, SdNumber) and isinstance(right, SdNumber):
             self.stack.append(SdNumber(left.value**right.value))
         else:
@@ -586,8 +618,7 @@ class VM:
 
     def _op_binary_mod(self, frame: BytecodeFrame, arg: object, line: int, column: int) -> None:
         """Pop ``left`` and ``right``; push ``left % right`` (others: see dunder)."""
-        right = self._unwrap_val(self.stack.pop(), line, column)
-        left = self._unwrap_val(self.stack.pop(), line, column)
+        left, right = self._pop_pair(line, column)
         if (
             isinstance(left, SdNumber)
             and isinstance(right, SdNumber)
@@ -601,8 +632,7 @@ class VM:
 
     def _op_compare_eq(self, frame: BytecodeFrame, arg: object, line: int, column: int) -> None:
         """Pop ``left`` and ``right``; push ``left == right``."""
-        right = self._unwrap_val(self.stack.pop(), line, column)
-        left = self._unwrap_val(self.stack.pop(), line, column)
+        left, right = self._pop_pair(line, column)
         if isinstance(left, SdNumber) and isinstance(right, SdNumber):
             self.stack.append(SdBool(left.value == right.value))
         else:
@@ -612,8 +642,7 @@ class VM:
 
     def _op_compare_ne(self, frame: BytecodeFrame, arg: object, line: int, column: int) -> None:
         """Pop ``left`` and ``right``; push ``left != right``."""
-        right = self._unwrap_val(self.stack.pop(), line, column)
-        left = self._unwrap_val(self.stack.pop(), line, column)
+        left, right = self._pop_pair(line, column)
         if isinstance(left, SdNumber) and isinstance(right, SdNumber):
             self.stack.append(SdBool(left.value != right.value))
         else:
@@ -623,8 +652,7 @@ class VM:
 
     def _op_compare_lt(self, frame: BytecodeFrame, arg: object, line: int, column: int) -> None:
         """Pop ``left`` and ``right``; push ``left < right``."""
-        right = self._unwrap_val(self.stack.pop(), line, column)
-        left = self._unwrap_val(self.stack.pop(), line, column)
+        left, right = self._pop_pair(line, column)
         if isinstance(left, SdNumber) and isinstance(right, SdNumber):
             self.stack.append(SdBool(left.value < right.value))
         else:
@@ -634,8 +662,7 @@ class VM:
 
     def _op_compare_le(self, frame: BytecodeFrame, arg: object, line: int, column: int) -> None:
         """Pop ``left`` and ``right``; push ``left <= right``."""
-        right = self._unwrap_val(self.stack.pop(), line, column)
-        left = self._unwrap_val(self.stack.pop(), line, column)
+        left, right = self._pop_pair(line, column)
         if isinstance(left, SdNumber) and isinstance(right, SdNumber):
             self.stack.append(SdBool(left.value <= right.value))
         else:
@@ -645,8 +672,7 @@ class VM:
 
     def _op_compare_gt(self, frame: BytecodeFrame, arg: object, line: int, column: int) -> None:
         """Pop ``left`` and ``right``; push ``left > right``."""
-        right = self._unwrap_val(self.stack.pop(), line, column)
-        left = self._unwrap_val(self.stack.pop(), line, column)
+        left, right = self._pop_pair(line, column)
         if isinstance(left, SdNumber) and isinstance(right, SdNumber):
             self.stack.append(SdBool(left.value > right.value))
         else:
@@ -656,8 +682,7 @@ class VM:
 
     def _op_compare_ge(self, frame: BytecodeFrame, arg: object, line: int, column: int) -> None:
         """Pop ``left`` and ``right``; push ``left >= right``."""
-        right = self._unwrap_val(self.stack.pop(), line, column)
-        left = self._unwrap_val(self.stack.pop(), line, column)
+        left, right = self._pop_pair(line, column)
         if isinstance(left, SdNumber) and isinstance(right, SdNumber):
             self.stack.append(SdBool(left.value >= right.value))
         else:

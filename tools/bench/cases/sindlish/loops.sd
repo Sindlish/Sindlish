@@ -1,8 +1,8 @@
 kaam loops() {
     adad total = 0
-    har i mein range(200) {
+    har i mein silsilo(200) {
         adad i2 = i * i
-        har j mein range(50) {
+        har j mein silsilo(50) {
             total = total + i2 + j
         }
     }

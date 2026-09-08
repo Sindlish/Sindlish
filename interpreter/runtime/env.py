@@ -40,20 +40,12 @@ class Environment:
 
         if self.parent:
             return self.parent.lookup_record(name, node, code)
-        if node:
-            raise NaleJeGhalti(
-                details=f"Nalo '{name}' na milyo. Cha tawaan sahi likhyo aahe?",
-                line=node.line,
-                column=node.column,
-                code_string=code,
-            )
-        else:
-            raise NaleJeGhalti(
-                details=f"Nalo '{name}' na milyo. Cha tawaan sahi likhyo aahe?",
-                line=1,
-                column=1,
-                code_string=code,
-            )
+        raise NaleJeGhalti(
+            details=f"Nalo '{name}' na milyo. Cha tawaan sahi likhyo aahe?",
+            line=node.line if node else 1,
+            column=node.column if node else 1,
+            code_string=code,
+        )
 
     def get_value(self, name: str, node, code: str) -> Any:
         """Returns just the value of a variable."""
@@ -66,8 +58,8 @@ class Environment:
         if record.is_const:
             raise HalndeVaktGhalti(
                 details=f"'{name}' pakko (const) aahe, eho badli natho saghjay.",
-                line=node.line,
-                column=node.column,
+                line=node.line if node else 1,
+                column=node.column if node else 1,
                 code_string=code,
             )
         record.value = value
