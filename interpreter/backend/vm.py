@@ -305,10 +305,27 @@ class VM:
 
     def run(self) -> None:
         try:
+            dispatch = self._dispatch
             while self.frames:
                 frame = self.frames[-1]
-                if frame.ip < len(frame.instructions):
-                    self.step()
+                # The active frame may change under a CALL/RETURN handler, so
+                # the loop re-synchronises to ``self.frames[-1]`` whenever the
+                # running frame is no longer the top of the stack. A frame is
+                # only popped once its own instruction pointer runs past the
+                # end of its instruction list.
+                instructions = frame.instructions
+                line_col = frame.line_col_map
+                pc = frame.ip
+                while pc < len(instructions):
+                    opcode, arg = instructions[pc]
+                    frame.ip = pc + 1
+                    line, column = (
+                        line_col[pc] if 0 <= pc < len(line_col) else (0, 0)
+                    )
+                    dispatch[opcode](frame, arg, line, column)
+                    pc = frame.ip
+                    if self.frames[-1] is not frame:
+                        break
                 else:
                     if len(self.frames) == 1:
                         break
