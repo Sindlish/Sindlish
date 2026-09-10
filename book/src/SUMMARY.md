@@ -49,3 +49,10 @@
 - [Environment, Builtins & the REPL](runtime.md)
 - [Testing the Interpreter](testing.md)
 - [Add a Feature End-to-End](contributing.md)
+
+# Appendices 📚
+
+- [AST Node Reference](appendix-ast.md)
+- [Grammar (EBNF)](appendix-grammar.md)
+- [Distribution, Packaging & CI](appendix-distribution.md)
+- [The VS Code Extension](appendix-extension.md)

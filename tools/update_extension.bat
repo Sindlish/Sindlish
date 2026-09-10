@@ -8,7 +8,8 @@ echo.
 set /p EXT_VERSION="Enter extension version (e.g., 1.0.1): "
 
 echo.
-echo 1. Updating bundled Python interpreter...
+echo 1. Mirroring bundled Python interpreter (removes stale files)...
+if exist vscode-extension\server\interpreter rmdir /s /q vscode-extension\server\interpreter
 xcopy /E /I /Y interpreter vscode-extension\server\interpreter >nul
 
 echo.

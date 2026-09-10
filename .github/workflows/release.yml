@@ -30,25 +30,10 @@ jobs:
         run: uv python install
       - name: Install dependencies
         run: uv sync --all-groups
-      - name: Install Pillow
-        run: uv pip install Pillow
       - name: Generate Icons
         run: uv run python tools/generate_icons.py
       - name: Build with PyInstaller
-        run: |
-          if [ "${{ matrix.os }}" == "windows-latest" ]; then
-            ICON="tools/sindlish.ico"
-          elif [ "${{ matrix.os }}" == "macos-latest" ]; then
-            ICON="tools/sindlish.icns"
-          else
-            ICON=""
-          fi
-          if [ -n "$ICON" ]; then
-            uv run pyinstaller --onedir --name sindlish --icon "$ICON" main.py
-          else
-            uv run pyinstaller --onedir --name sindlish main.py
-          fi
-        shell: bash
+        run: uv run pyinstaller --noconfirm sindlish.spec
       - name: Build Windows Installer (Inno Setup)
         if: matrix.os == 'windows-latest'
         run: '& "C:\Program Files (x86)\Inno Setup 6\ISCC.exe" installer.iss'
@@ -56,14 +41,16 @@ jobs:
       - name: Build macOS .pkg Installer
         if: matrix.os == 'macos-latest'
         run: |
+          VERSION=$(uv run python -c "import interpreter; print(interpreter.__version__)")
           mkdir -p pkg_root/usr/local/lib/sindlish pkg_root/usr/local/bin
           cp -R dist/sindlish/ pkg_root/usr/local/lib/sindlish/
           printf '#!/bin/sh\nexec /usr/local/lib/sindlish/sindlish "$@"\n' > pkg_root/usr/local/bin/sindlish
           chmod +x pkg_root/usr/local/bin/sindlish pkg_root/usr/local/lib/sindlish/sindlish
-          pkgbuild --identifier com.sindlish.cli --version 0.1.1 --install-location / --root pkg_root dist/sindlish-installer-macos.pkg
+          pkgbuild --identifier com.sindlish.cli --version "$VERSION" --install-location / --root pkg_root dist/sindlish-installer-macos.pkg
       - name: Build Linux .deb Package
         if: matrix.os == 'ubuntu-latest'
         run: |
+          VERSION=$(uv run python -c "import interpreter; print(interpreter.__version__)")
           mkdir -p deb_root/usr/local/lib/sindlish deb_root/usr/local/bin
           mkdir -p deb_root/usr/share/icons/hicolor/512x512/apps
           mkdir -p deb_root/DEBIAN
@@ -72,7 +59,7 @@ jobs:
           printf '#!/bin/sh\nexec /usr/local/lib/sindlish/sindlish "$@"\n' > deb_root/usr/local/bin/sindlish
           chmod +x deb_root/usr/local/bin/sindlish deb_root/usr/local/lib/sindlish/sindlish
           echo "Package: sindlish" > deb_root/DEBIAN/control
-          echo "Version: 0.1.1" >> deb_root/DEBIAN/control
+          echo "Version: $VERSION" >> deb_root/DEBIAN/control
           echo "Section: utils" >> deb_root/DEBIAN/control
           echo "Priority: optional" >> deb_root/DEBIAN/control
           echo "Architecture: amd64" >> deb_root/DEBIAN/control

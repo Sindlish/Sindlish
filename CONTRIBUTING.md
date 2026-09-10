@@ -19,22 +19,24 @@ uv run pytest
 python main.py
 
 # Run benchmarks
-python bench/run_benchmarks.py
+uv run python tools/bench/run.py
 ```
 
-## 8-Step Pipeline for Adding a Feature
+## 10-Step Pipeline for Adding a Feature
 
-When adding a new language feature, follow this 8-step pipeline:
+When adding a new language feature, follow this 10-step pipeline:
 
 ```mermaid
 flowchart LR
     A["1. Tokens"] --> B["2. Lexer"]
-    B --> C["3. Parser"]
-    C --> D["4. AST"]
-    D --> E["5. Resolver"]
-    E --> F["6. Compiler"]
-    F --> G["7. VM"]
-    G --> H["8. Tests"]
+    B --> C["3. Keywords"]
+    C --> D["4. Parser"]
+    D --> E["5. AST"]
+    E --> F["6. Resolver"]
+    F --> G["7. Compiler"]
+    G --> H["8. VM"]
+    H --> I["9. Tests"]
+    I --> J["10. Docs"]
 ```
 
 ### Step 1: Tokens
@@ -154,14 +156,14 @@ class TestMyFeature:
 
 ### Step 10: Documentation
 
-Update relevant documentation in `developer-docs/` and the offline docs.
+Update relevant documentation in `book/` (and the offline docs in `interpreter/offline_docs.txt`).
 
 ## Code Conventions
 
 ### General
 
 - **No comments** in source code unless explicitly asked
-- **No docstrings** on internal methods (only on `Interpreter.run_source` and CLI functions in `main.py`)
+- **No docstrings** on internal methods (only on `Interpreter.run_source` and CLI functions in `interpreter/cli.py`)
 - Use **`__slots__`** on all classes for memory efficiency
 - Use **frozen dataclasses** where appropriate (e.g. `Token`)
 
@@ -225,9 +227,11 @@ FEHRIST_TYPE.register_method("mymethod", my_method)
 
 ```
 interpreter/
-├── __init__.py        # Interpreter facade (pipeline orchestration)
+├── __init__.py        # Interpreter facade (pipeline orchestration) + __version__
+├── cli.py             # CLI: run / repl / eval / tokens / ast / check / docs
 ├── errors.py          # Error types (DO NOT modify lightly)
 ├── repl.py            # REPL (syntax highlighting, completion)
+├── offline_docs.txt   # `sindlish docs` offline reference (package data)
 ├── frontend/
 │   ├── tokens.py      # TokenType enum (add new tokens here)
 │   ├── keywords.py    # Sindhi keyword mappings
@@ -238,6 +242,7 @@ interpreter/
 │   └── resolver.py    # Name resolution, slot allocation, type checking
 ├── backend/
 │   ├── opcodes.py     # Bytecode opcodes (add new opcodes here)
+│   ├── markers.py     # StarArgs/Kwargs marker operands
 │   ├── compiler.py    # AST to bytecode compiler
 │   ├── frame.py       # Execution frame
 │   └── vm.py          # Stack-based virtual machine
@@ -250,6 +255,12 @@ interpreter/
 └── runtime/
     ├── env.py         # Environment (symbol table)
     └── builtins.py    # Built-in functions
+
+main.py                # thin shim → interpreter.cli (for `python main.py`)
+sindlish.spec          # PyInstaller definition
+install.sh             # macOS/Linux install-from-source
+book/                  # the mdBook (canonical docs)
+# vscode-extension/, tools/, tests/, examples/, roadmap/ — see book/src/repo-map.md
 ```
 
 ## Common Patterns
@@ -289,7 +300,7 @@ FEHRIST_TYPE.register_method("mymethod", my_method_function)
 ## Pull Request Guidelines
 
 1. **Fork and branch** from `main`
-2. **Follow the 8-step pipeline** for new features
+2. **Follow the 10-step pipeline** for new features
 3. **Write tests** for all new functionality
 4. **Run the full test suite** before submitting
 5. **Update documentation** if adding user-facing features

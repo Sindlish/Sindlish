@@ -141,7 +141,7 @@ def _validate(ls: LanguageServer, params):
         # Save successful state for hover/completion
         ls.current_ast = ast
         ls.current_resolver = resolver
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001 - every diagnostic reaches the client
         _report_diagnostic(ls, text_doc.uri, e, diagnostics, source)
 
     ls.text_document_publish_diagnostics(

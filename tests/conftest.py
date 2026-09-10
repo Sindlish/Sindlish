@@ -11,12 +11,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-from interpreter.analysis.resolver import Resolver
-from interpreter.backend.compiler import Compiler
-from interpreter.backend.vm import VM
-from interpreter.frontend.lexer import Lexer
-from interpreter.frontend.parser import Parser
-from interpreter.frontend.tokens import TokenType
+from interpreter import Interpreter
 from interpreter.objects import (
     SdBool,
     SdDict,
@@ -27,49 +22,30 @@ from interpreter.objects import (
     SdSet,
     SdString,
 )
-from interpreter.runtime.builtins import SimpleBuiltins
-from interpreter.runtime.env import Environment
 
 
 def create_globals_env():
-    globals_env = Environment()
-    simple_handler = SimpleBuiltins()
-    for name, func in simple_handler.get_all().items():
-        globals_env.define(name, value=func, var_type=TokenType.KAAM, is_const=True)
-    return globals_env
+    return Interpreter.create_globals_env()
 
 
 def run(code: str):
     """
     Run Sindlish source code end-to-end and return
     (vm_instance, captured_stdout).
+
+    Routes through the Interpreter facade stages so tests exercise the
+    exact same pipeline as the CLI and REPL.
     """
-    lexer = Lexer(code)
-    tokens = lexer.generate_tokens()
-    parser = Parser(tokens, code)
-    ast = parser.parse()
-
-    resolver = Resolver(code)
-    resolver.resolve(ast)
-
-    compiler = Compiler(code)
-    instructions, constants, line_col_map = compiler.compile(ast)
-
-    globals_env = create_globals_env()
-    slot_metadata = resolver.get_slot_metadata()
+    interp = Interpreter(create_globals_env())
 
     old_stdout = sys.stdout
     sys.stdout = buffer = io.StringIO()
     try:
-        vm = VM(
-            code,
-            instructions,
-            constants,
-            globals_env,
-            getattr(ast, "slot_count", 0),
-            slot_metadata,
-            line_col_map,
-        )
+        tokens = interp.lex(code)
+        ast = interp.parse(tokens, code)
+        resolver = interp.resolve(ast, code)
+        instructions, constants, line_col_map = interp.compile(ast, code)
+        vm = interp.build_vm(code, instructions, constants, line_col_map, ast, resolver)
         vm.run()
     finally:
         sys.stdout = old_stdout

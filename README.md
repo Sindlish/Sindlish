@@ -16,13 +16,14 @@ For decades, the programming world has been heavily dominated by the English lan
 
 ## Installation
 
-You can install Sindlish via the provided installers or directly run it using Python.
+You can install Sindlish via the provided installer for macOS/Linux or directly run it using Python.
 
 ### Quick Start
 
 Run the interpreter interactively:
 ```bash
-uv run main.py
+uv run main.py            # from a source checkout
+uv run sindlish repl      # when installed as a console script
 ```
 
 Execute a file:
@@ -35,11 +36,11 @@ Try the bundled examples in [`examples/`](examples/):
 uv run main.py run examples/hello.sd
 ```
 
-Access offline documentation:
+Access offline documentation from the terminal:
 ```bash
 uv run main.py docs
 ```
 
 ## Documentation
 
-Comprehensive online documentation and roadmaps can be found at the [Website](https://sindlish.vercel.app/). For quick reference in the terminal, utilise the `docs` command provided by the Sindlish CLI.
+The canonical documentation is the mdBook in [`book/`](book/) (*Sindlish Internals — A Cozy Field Guide*). Build it locally with `mdbook build book`. The older `docs/` website and `developer-docs/` were removed from the repo; the language reference and walkthroughs all live in the book.

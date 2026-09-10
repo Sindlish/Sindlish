@@ -59,7 +59,7 @@ Items marked [x] are fixed with regression coverage in `tests/test_bugfixes.py`.
   1. `_compute_mro` appended `self` at the **end** (`result + (self,)`) instead of merging it as the *first* C3 sequence like Python does. Consequence: ancestor methods overrode descendants — `B(A)` that registers its own `hello` still resolved A's version via `lookup_method`. Overriding was structurally broken for any type using inheritance.
   2. `_c3_merge` had no failure path: when no valid head existed it just `break`s and returned a partial order. Repro: F/G unrelated; `FA(F,G)`, `GA(G,F)`, `HA(FA,GA)` → `HA.mro == (HA,)` — both parents vanished from the MRO with no error. Python raises `TypeError: Cannot create a consistent method resolution order`.
   **Fixed 2026-08 by #32:** `_compute_mro` now prepends `self` and includes `self._bases` in the merge so direct bases precede shared ancestors; `_c3_merge` raises `TypeError` on stuck-merge (message in Romanized Sindhi). Covered by `tests/test_mro.py`. Load-bearing for the planned `jamaat` classes feature.
-- [ ] **`tests/conftest.py` hardcodes a machine-specific sys.path** — line 12 does `sys.path.insert(0, "d:/Code/Sindlish")`, which breaks on any other checkout location/OS. Fix: derive from `pathlib.Path(__file__).resolve().parents[1]`. Found 2026-08 while writing the testing chapter
+- [x] **`tests/conftest.py` hardcodes a machine-specific sys.path** — line 12 does `sys.path.insert(0, "d:/Code/Sindlish")`, which breaks on any other checkout location/OS. Fix: derive from `pathlib.Path(__file__).resolve().parents[1]`. Found 2026-08 while writing the testing chapter. **Fixed 2026-09:** conftest now derives the root from `Path(__file__).resolve().parents[1]` and routes runs through the `Interpreter` facade stages
 
 ---
 
@@ -125,8 +125,9 @@ Items marked [x] are fixed with regression coverage in `tests/test_bugfixes.py`.
 - [x] Close the five remaining safety gaps found in that audit (2026-09, `tests/test_safety_gaps.py`): (1) runaway recursion now stops with `HalndeVaktGhalti` at a 10,000-frame cap (`vm.py:_push_frame`) instead of hanging; (2) top-level `wapas` is a `TarteebJeGhalti` structure error (`compiler.compile_ReturnNode`); (3) duplicate keyword args raise `MatalabJeGhalti` instead of silently last-wins (`vm.py:_expand_call_args`); (4) `silsilo()` rejects non-`adad` args with a clean `QisamJeGhalti` instead of leaking Python's `int()` message (`builtins.py`); (5) `fehrist[adad]` stamps its element type onto the list so `wadha`/`wajh`/`wadhayo` and `x[i] = v` re-check at mutation time (`objects/collections.py:_check_list_element`). The safety.md Promise-4 "element pushes aren't re-checked" hole is now closed.
 - [x] Tests for every fix above (currently 512 passing)
 - [x] VM performance pass guided by `bench/run_benchmarks.py` — shipped with #34 (2026-09): inlined dispatch loop, hoisted loop invariants, frame re-sync only on call/return, `_pop_pair` operand unwrap, O(1) constant-pool dedupe; interning/no-win attempts recorded on #34
-- [ ] Sync docs website (`docs/` submodule) with language changes
+- [x] Sync docs website (`docs/` submodule) with language changes — **superseded 2026-09:** the `docs/` submodule was removed from the repo; the mdBook is the canonical docs
 - [x] Remove vestigial code: `SdShey._ref_count`, unused `Environment.global_names/nonlocal_names` — shipped with #32
+- [x] Remove the `docs/` web-site submodule from the repo — the site lives in the separate `sindlish-website` repo; the mdBook in `book/` is the canonical documentation (2026-09)
 
 ---
 

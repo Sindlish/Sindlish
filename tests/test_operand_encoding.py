@@ -13,7 +13,6 @@ import pytest
 from interpreter.backend.compiler import Compiler
 from interpreter.backend.opcodes import OPERAND_SHAPES, OpCode
 from interpreter.frontend.tokens import TokenType
-
 from tests.test_golden_bytecode import PROGRAMS, compile_instructions, compile_listing
 
 

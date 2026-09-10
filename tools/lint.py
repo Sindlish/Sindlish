@@ -1,40 +1,31 @@
-import os
 import sys
+from pathlib import Path
 
-# Ensure we can import the interpreter package
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-from interpreter.lexer import Lexer
-from interpreter.parser import Parser
+from interpreter import Interpreter
+from interpreter.errors import SindhiBaseError
 
 
 def lint(file_path):
     try:
-        with open(file_path, "r", encoding="utf-8") as f:
-            code = f.read()
-    except Exception as e:
+        code = Path(file_path).read_text(encoding="utf-8")
+    except (OSError, UnicodeError) as e:
         print(f"1:Error reading file {e}")
-        return
+        return 1
 
     try:
-        lexer = Lexer(code)
-        tokens = lexer.generate_tokens()
+        Interpreter().check(code)
+    except SindhiBaseError as e:
+        print(f"{e.line}:{e}")
+        return 1
 
-        parser = Parser(tokens)
-        parser.parse()
-        print("OK")
-    except Exception as e:
-        msg = str(e)
-        import re
-
-        line = 1
-        m = re.search(r"line (\d+)", msg)
-        if m:
-            line = int(m.group(1))
-
-        print(f"{line}:{msg}")
+    print("OK")
+    return 0
 
 
 if __name__ == "__main__":
-    if len(sys.argv) > 1:
-        lint(sys.argv[1])
+    if len(sys.argv) < 2:
+        print("Usage: python tools/lint.py <file.sd>")
+        sys.exit(2)
+    sys.exit(lint(sys.argv[1]))

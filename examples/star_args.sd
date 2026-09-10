@@ -21,7 +21,7 @@ kaam profile(naam, **info) {
 
 profile('Sara', umr = 25, shahr = 'Hyderabad')
 
-# NOTE: Call-site unpacking (f(*list), f(**dict)) is not supported yet.
-extra = {'lang': 'Sindlish', 'ver': 1}
-likh(extra)
+# Call-site unpacking (f(*list), f(**dict)) is supported via marker operands.
+extra_nums = [10, 20, 30]
+likh(jorr(*extra_nums))
 

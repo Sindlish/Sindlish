@@ -71,9 +71,9 @@ user-facing classes build on it:
 ## Phase E — Quality & performance
 
 - Grow test suite alongside every feature above
-- VM throughput work (benchmarks vs Python/Rust live in `bench/`)
+- VM throughput work (benchmarks vs Python/Rust live in `tools/bench/`)
 - Consistent error philosophy — **decided 2026-09 (RFC in #33):** all six arithmetic ops return `Result` (parcels) on failure; ordering comparisons raise; equality is total. TODO.md item shipped with #33.
-- Docs website sync (`docs/` submodule)
+- Docs website sync (`docs/` submodule) — **done 2026-09:** the `docs/` submodule was removed; the mdBook in `book/` is the canonical documentation
 
 ---
 

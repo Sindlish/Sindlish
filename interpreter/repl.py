@@ -1,3 +1,4 @@
+import re
 from collections.abc import Iterable
 
 from prompt_toolkit import PromptSession
@@ -7,7 +8,8 @@ from prompt_toolkit.styles import Style
 
 from . import Interpreter
 from .errors import SindhiBaseError
-from .frontend.keywords import KEYWORDS
+from .frontend.keywords import DATATYPES, KEYWORDS
+from .frontend.tokens import TokenType
 from .runtime.builtins import SimpleBuiltins
 
 # Define the style for syntax highlighting
@@ -24,6 +26,35 @@ sindlish_style = Style.from_dict(
     }
 )
 
+# Words that read like type annotations / literals rather than control flow.
+_LITERAL_TYPE_TOKENS = (TokenType.SACH, TokenType.KOORE, TokenType.PAKKO, TokenType.KAAM)
+
+# Derive syntax groups from the language registries so highlighting and
+# completion never drift from the actual keyword/builtin tables.
+_KEYWORD_GROUP = sorted(
+    w for w, t in KEYWORDS.items() if t not in DATATYPES and t not in _LITERAL_TYPE_TOKENS
+)
+_DATATYPE_GROUP = sorted(
+    w for w, t in KEYWORDS.items() if t in DATATYPES or t in _LITERAL_TYPE_TOKENS
+)
+_BUILTIN_GROUP = sorted(n for n in SimpleBuiltins.functions if n not in KEYWORDS)
+
+_SYNTAX_PATTERN = re.compile(
+    rf"""
+    (?P<comment>\#.*) |
+    (?P<string>"(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*') |
+    (?P<number>\b\d+(?:\.\d+)?\b) |
+    (?P<keyword>\b(?:{"|".join(_KEYWORD_GROUP)})\b) |
+    (?P<datatype>\b(?:{"|".join(_DATATYPE_GROUP)})\b) |
+    (?P<builtin>\b(?:{"|".join(_BUILTIN_GROUP)})\b) |
+    (?P<operator>[+\-*/%^=><!?]+) |
+    (?P<identifier>\b[a-zA-Z_]\w*\b) |
+    (?P<space>\s+) |
+    (?P<other>.)
+    """,
+    re.VERBOSE,
+)
+
 
 class SindlishLexer(Lexer):
     def lex_document(self, document):
@@ -31,27 +62,7 @@ class SindlishLexer(Lexer):
             line = document.lines[lineno]
             tokens = []
 
-            import re
-
-            # Regex to match strings, comments, numbers, keywords, and other characters
-            # Order matters: comments and strings first
-            pattern = re.compile(
-                r"""
-                (?P<comment>\#.*) |
-                (?P<string>"(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*') |
-                (?P<number>\b\d+(?:\.\d+)?\b) |
-                (?P<keyword>\b(?:agar|yawari|warna|jistain|aen|ya|nah|bahari|aalmi|wapas|match|ok|ghalti|har|tor|jari|mein)\b) |
-                (?P<datatype>\b(?:adad|lafz|dahai|faislo|sach|koorh|khali|pakko|fehrist|lughat|majmuo|kaam)\b) |
-                (?P<builtin>\b(?:majmuo|lambi|likh|puch|range)\b) |
-                (?P<operator>[+\-*/%^=><!?]+) |
-                (?P<identifier>\b[a-zA-Z_]\w*\b) |
-                (?P<space>\s+) |
-                (?P<other>.)
-            """,
-                re.VERBOSE,
-            )
-
-            for match in pattern.finditer(line):
+            for match in _SYNTAX_PATTERN.finditer(line):
                 kind = match.lastgroup
                 value = match.group()
 
@@ -184,7 +195,7 @@ def start_repl(version: str = "0.1.1"):
                 interpreter.run_source(text, is_repl=True)
             except SindhiBaseError:
                 pass
-            except Exception as e:
+            except Exception as e:  # noqa: BLE001 - history load is non-fatal
                 print(f"Error: {e}")
 
         except KeyboardInterrupt:

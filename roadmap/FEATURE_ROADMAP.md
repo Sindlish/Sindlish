@@ -179,7 +179,7 @@ Note: collections compare by identity today (value equality for containers is pl
 | Break (tor) | ✅ | `tor` | P1 | Loops |
 | Continue (jari) | ✅ | `jari` | P1 | Loops |
 | Do-While | ❌ | `kar { } jistain condition` | P2 | - |
-| Switch/Match (match) | ⚠️ Partial | keyword + AST nodes exist; parsing not implemented | P1 | - |
+| Switch/Match (match) | ❌ | keyword reserved with a clean error; no syntax yet | P1 | - |
 | Goto | ❌ | - | P3 | (controversial) |
 
 ### Current Control Flow Syntax
@@ -214,11 +214,11 @@ har i mein silsilo(5) {
 | Recursion | ✅ | Function calling itself | P1 | User-defined functions |
 | Default Arguments | ✅ | `kaam foo(x=10) { }` | P1 | User-defined functions |
 | Variadic Args (`*args`) | ✅ | `kaam foo(*nums) { }` (definition side) | P1 | User-defined functions |
-| Keyword Args (`**kwargs`) | ⚠️ Partial | definition side works; **call sites misparse** (known bug) | P0 fix | User-defined functions |
+| Keyword Args (`**kwargs`) | ✅ | definition + call sites (`f(x = 1)`); marker-encoded kwarg pairs | P0 fix | User-defined functions |
 | Implicit Return | ✅ | last expression is returned | P2 | User-defined functions |
 | Anonymous Functions | ❌ | `lambai x => x + 1` | P1 | User-defined functions |
-| Closures | ❌ | nested functions cannot capture locals; `bahari` crashes compiler | P1 | User-defined functions |
-| Call-site Unpacking | ❌ | `foo(*list)`, `foo(**dict)` rejected by compiler | P1 | Variadic Args |
+| Closures | ✅ | nested functions capture locals via shared cells; `bahari` writes to the enclosing scope | P1 | User-defined functions |
+| Call-site Unpacking | ✅ | `foo(*list)`, `foo(**dict)` via StarArgs/KwargsDict markers | P1 | Variadic Args |
 | Decorators | ❌ | `@decorator` | P2 | User-defined functions |
 | Generators (yield) | ❌ | `yield x` | P2 | User-defined functions |
 | Async/Await | ❌ | - | P2 | - |
@@ -415,7 +415,7 @@ Sindlish deliberately replaces try/catch with a **Result system**.
 | Feature | Status | Notes | Priority |
 |---------|--------|-------|----------|
 | Automatic Memory Management | ✅ | backed by Python's GC | P0 |
-| Reference Counting (internal) | ⚠️ | scaffolding exists but unused | P3 |
+| Reference Counting (internal) | Removed | vestigial `_ref_count` deleted in #32; memory owned by Python GC | P3 |
 | Threads | ❌ | - | P2 |
 | Async/Await | ❌ | - | P2 |
 | Processes | ❌ | - | P3 |
@@ -473,7 +473,7 @@ Sindlish deliberately replaces try/catch with a **Result system**.
 - [x] Bytecode compiler + VM
 
 ### P1 - High Priority
-- [ ] Fix keyword arguments at call sites *(known bug)*
+- [x] Fix keyword arguments at call sites *(known bug)*
 - [ ] Match statement
 - [ ] Implement or cleanly reject closures / `bahari`
 - [ ] Ternary operator

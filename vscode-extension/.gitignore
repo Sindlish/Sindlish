@@ -3,3 +3,4 @@
 /.vscode-test
 /python-engine
 /server/interpreter
+/out

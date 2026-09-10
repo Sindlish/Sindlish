@@ -89,8 +89,10 @@ PROGRAMS = [
     ),
     (
         "agar_yawari_warna",
-        'x = 5\nagar x > 5 {\n    likh("big")\n} yawari x > 3 {\n    '
-        'likh("mid")\n} warna {\n    likh("small")\n}',
+        (
+            'x = 5\nagar x > 5 {\n    likh("big")\n} yawari x > 3 {\n    '
+            'likh("mid")\n} warna {\n    likh("small")\n}'
+        ),
         (
             ("LOAD_CONST", 0),
             ("STORE_GLOBAL", (1, False, None, None)),
@@ -156,8 +158,10 @@ PROGRAMS = [
     ),
     (
         "function_def_and_call",
-        "kaam fact(n) {\n    agar n <= 1 {\n        wapas 1\n    }\n"
-        "    wapas n * fact(n - 1)\n}\nx = fact(5)",
+        (
+            "kaam fact(n) {\n    agar n <= 1 {\n        wapas 1\n    }\n"
+            "    wapas n * fact(n - 1)\n}\nx = fact(5)"
+        ),
         (
             ("LOAD_CONST", 2),
             ("MAKE_FUNCTION", 0),
@@ -169,10 +173,12 @@ PROGRAMS = [
         ),
     ),
     (
-        "closure_capture_bahari",
-        "kaam shuru() {\n    ginti = 0\n    kaam wadhao() {\n        "
-        "bahari ginti\n        ginti = ginti + 1\n    }\n    wadhao()\n"
-        "    wapas ginti\n}\nx = shuru()",
+"closure_capture_bahari",
+        (
+            "kaam shuru() {\n    ginti = 0\n    kaam wadhao() {\n        "
+            "bahari ginti\n    ginti = ginti + 1\n    }\n    wadhao()\n"
+            "    wapas ginti\n}\nx = shuru()"
+        ),
         (
             ("LOAD_CONST", 4),
             ("MAKE_FUNCTION", 0),
@@ -184,8 +190,10 @@ PROGRAMS = [
     ),
     (
         "typed_collections",
-        'fehrist[adad] a = [1, 2, 3]\nlughat[lafz, adad] b = {"ek": 1}\n'
-        "majmuo[adad] c = {1, 2}",
+        (
+            'fehrist[adad] a = [1, 2, 3]\nlughat[lafz, adad] b = {"ek": 1}\n'
+            "majmuo[adad] c = {1, 2}"
+        ),
         (
             ("LOAD_CONST", 0),
             ("LOAD_CONST", 1),
@@ -213,9 +221,11 @@ PROGRAMS = [
     ),
     (
         "result_ops",
-        "kaam vind(a, b) {\n    wapas a / b\n}\nr = vind(5, 0)\n"
-        'x = r.bachao(0)\nagar r.ghalti {\n    likh("failed")\n}\n'
-        "dahai q = vind(8, 0)?\nz = vind(4, 2).lazmi(0)",
+        (
+            "kaam vind(a, b) {\n    wapas a / b\n}\nr = vind(5, 0)\n"
+            'x = r.bachao(0)\nagar r.ghalti {\n    likh("failed")\n}\n'
+            "dahai q = vind(8, 0)?\nz = vind(4, 2).lazmi(0)"
+        ),
         (
             ("LOAD_CONST", 0),
             ("MAKE_FUNCTION", 0),

@@ -20,6 +20,7 @@ pakko lafz G = "Salam!" # Constant
 fehrist : List (e.g., [1, 2, 3])
 lughat  : Dictionary (e.g., {"key": "value"})
 majmuo  : Set (e.g., {1, 2, 3})
+Typed collections: fehrist[adad] nums = [1, 2, 3]
 
 4. CONTROL FLOW
 ---------------
@@ -35,9 +36,12 @@ jistain condition {
     # While loop
 }
 
-har i mein range(5) {
+har i mein silsilo(5) {
     # For loop
 }
+
+tor   # break
+jari  # continue
 
 5. FUNCTIONS
 ------------
@@ -48,12 +52,15 @@ kaam jorr(a, b) {
 6. ERROR HANDLING
 -----------------
 The language uses a Result system:
-val = operation()?         # Soft fallback, unwraps or returns error
-val = operation().bachao(0)# Custom fallback on error
-val = operation()!!        # Panic unwrap, crashes on error
+val = operation()?          # Soft fallback, unwraps or returns error
+val = operation().bachao(0) # Custom fallback on error
+val = operation()!!         # Panic unwrap, crashes on error
 
 7. BUILT-IN FUNCTIONS
 ---------------------
-likh(x)    : Prints x
-puch(msg)  : Takes user input
-lambi(x)   : Returns the length of collection x
+likh(x)     : Prints x
+puch(msg)   : Takes user input
+lambi(x)    : Returns the length of collection x
+silsilo(n)  : Lazy range 0..n (start, end, step variants)
+majmuo(...) : Builds a set
+qisam(x)    : Returns the type name of x

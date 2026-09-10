@@ -7,7 +7,6 @@ handler and every ``_op_*`` method corresponds to exactly one opcode.
 """
 
 from interpreter.backend.opcodes import OpCode
-
 from tests.conftest import run
 
 
