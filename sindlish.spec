@@ -9,7 +9,8 @@ frozen binary, and picks the matching installer icon per platform.
 import sys
 from pathlib import Path
 
-TOOLS_DIR = Path(__file__).resolve().parent / "tools"
+ROOT_DIR = Path(SPECPATH)
+TOOLS_DIR = ROOT_DIR / "tools"
 
 icon = ""
 if sys.platform == "win32":
@@ -22,8 +23,8 @@ a = Analysis(
     pathex=[],
     binaries=[],
     datas=[
-        (str(TOOLS_DIR.parent / "interpreter" / "offline_docs.txt"), "."),
-        (str(TOOLS_DIR.parent / "LICENSE"), "."),
+        (str(ROOT_DIR / "interpreter" / "offline_docs.txt"), "."),
+        (str(ROOT_DIR / "LICENSE"), "."),
     ],
     hiddenimports=[],
     hookspath=[],
