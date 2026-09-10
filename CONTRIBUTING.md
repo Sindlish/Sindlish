@@ -158,6 +158,10 @@ class TestMyFeature:
 
 Update relevant documentation in `book/` (and the offline docs in `interpreter/offline_docs.txt`).
 
+## License
+
+Sindlish is licensed under the GNU General Public License, version 3 or later (`GPL-3.0-or-later`); see [`LICENSE`](LICENSE). By contributing you agree that your contributions are provided under the same license.
+
 ## Code Conventions
 
 ### General

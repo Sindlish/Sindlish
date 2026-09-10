@@ -44,3 +44,9 @@ uv run main.py docs
 ## Documentation
 
 The canonical documentation is the mdBook in [`book/`](book/) (*Sindlish Internals — A Cozy Field Guide*). Build it locally with `mdbook build book`. The older `docs/` website and `developer-docs/` were removed from the repo; the language reference and walkthroughs all live in the book.
+
+## License
+
+Sindlish is free software, released under the [GNU General Public License, version 3 or (at your option) any later version](LICENSE) (`SPDX: GPL-3.0-or-later`). You can redistribute it and/or modify it under its terms — see the full text in [`LICENSE`](LICENSE) and the copy that ships inside the VS Code extension in [`vscode-extension/LICENSE`](vscode-extension/LICENSE).
+
+Copyright (C) 2026 Amanat Ali Panhwer

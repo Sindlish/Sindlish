@@ -7,6 +7,19 @@ name = "sindlish"
 description = "Sindlish is a localized high-level programming language. It is inspired by Python and it is in roman sindhi."
 readme = "README.md"
 requires-python = ">=3.13"
+authors = [
+    { name = "Amanat Ali Panhwer" },
+]
+license = "GPL-3.0-or-later"
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.13",
+    "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",
+    "Operating System :: OS Independent",
+    "Environment :: Console",
+    "Topic :: Software Development :: Interpreters",
+]
 dynamic = ["version"]
 dependencies = [
     "prompt-toolkit>=3.0.52",
@@ -16,9 +29,18 @@ dependencies = [
 [project.scripts]
 sindlish = "interpreter.cli:main"
 
+[project.urls]
+Homepage = "https://github.com/AmanatAliPanhwer/Sindlish"
+Repository = "https://github.com/AmanatAliPanhwer/Sindlish.git"
+Documentation = "https://github.com/AmanatAliPanhwer/Sindlish/tree/main/book"
+Issues = "https://github.com/AmanatAliPanhwer/Sindlish/issues"
+
 # Version is read from interpreter/__init__.py (single source of truth).
 [tool.hatch.version]
 path = "interpreter/__init__.py"
+
+[tool.hatch.metadata]
+license-files = ["LICENSE"]
 
 [tool.hatch.build.targets.wheel]
 packages = ["interpreter"]

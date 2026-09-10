@@ -21,7 +21,10 @@ a = Analysis(
     ["main.py"],
     pathex=[],
     binaries=[],
-    datas=[(str(TOOLS_DIR.parent / "interpreter" / "offline_docs.txt"), ".")],
+    datas=[
+        (str(TOOLS_DIR.parent / "interpreter" / "offline_docs.txt"), "."),
+        (str(TOOLS_DIR.parent / "LICENSE"), "."),
+    ],
     hiddenimports=[],
     hookspath=[],
     hooksconfig={},
