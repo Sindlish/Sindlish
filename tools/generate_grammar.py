@@ -166,7 +166,7 @@ def generate_grammar():
         "sindlish.tmLanguage.json",
     )
     os.makedirs(os.path.dirname(out_path), exist_ok=True)
-    with open(out_path, "w", encoding="utf-8") as f:
+    with open(out_path, "w", encoding="utf-8", newline="\n") as f:
         json.dump(grammar, f, indent=4)
 
     print(f"Grammar successfully written to {out_path}")
@@ -180,7 +180,7 @@ def generate_grammar():
         "syntaxes",
         "sindlish-definitions.json",
     )
-    with open(defs_path, "w", encoding="utf-8") as f:
+    with open(defs_path, "w", encoding="utf-8", newline="\n") as f:
         json.dump(defs, f, indent=4)
 
     print(f"Definitions successfully written to {defs_path}")
@@ -218,7 +218,7 @@ def generate_grammar():
         "vscode-extension",
         "language-configuration.json",
     )
-    with open(lang_path, "w", encoding="utf-8") as f:
+    with open(lang_path, "w", encoding="utf-8", newline="\n") as f:
         json.dump(lang_config, f, indent=4)
 
     print(f"Language configuration successfully written to {lang_path}")
