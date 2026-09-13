@@ -29,6 +29,11 @@ class TestDahai:
         interp, _ = run("dahai x")
         assert extract_value(interp.variables["x"]["value"]) == 0.0
 
+    def test_dahai_default_after_adad(self):
+        interp, _ = run("adad num1\ndahai num2")
+        assert extract_value(interp.variables["num1"]["value"]) == 0
+        assert extract_value(interp.variables["num2"]["value"]) == 0.0
+
     def test_dahai_with_value(self):
         interp, _ = run("dahai x = 3.14")
         assert extract_value(interp.variables["x"]["value"]) == 3.14
