@@ -219,9 +219,9 @@ class Compiler:
 
         One constant table is shared across the whole program: function objects
         store indices into this same table, so a literal used inside a nested
-        function reuses the program-level slot. Dedup uses type equality plus
-        content equality for ``SdShey`` objects (e.g. two ``SdNumber(5)`` share
-        one slot).
+        function reuses the program-level slot. Dedup must preserve scalar kinds
+        exactly: ``0`` and ``0.0`` are semantically different Sindlish numbers,
+        even though Python treats them as equal.
         """
         inner = getattr(value, "value", None)
         if inner is not None:
@@ -230,7 +230,7 @@ class Compiler:
             except TypeError:
                 pass
             else:
-                key = (type(value), inner)
+                key = (type(value), type(inner), inner)
                 idx = self._const_index.get(key)
                 if idx is not None:
                     return idx
@@ -241,8 +241,11 @@ class Compiler:
         for i, existing in enumerate(self.constants):
             if type(existing) is not type(value):
                 continue
-            if hasattr(value, "value") and existing.value == value.value:
-                return i
+            if hasattr(value, "value") and hasattr(existing, "value"):
+                if type(existing.value) is not type(value.value):
+                    continue
+                if existing.value == value.value:
+                    return i
             if existing == value:
                 return i
         self.constants.append(value)
