@@ -31,8 +31,10 @@ class TestDahai:
 
     def test_dahai_default_after_adad(self):
         interp, _ = run("adad num1\ndahai num2")
-        assert extract_value(interp.variables["num1"]["value"]) == 0
-        assert extract_value(interp.variables["num2"]["value"]) == 0.0
+        num1 = interp.variables["num1"]["value"]
+        num2 = interp.variables["num2"]["value"]
+        assert type(num1.value) is int and num1.value == 0
+        assert type(num2.value) is float and num2.value == 0.0
 
     def test_dahai_with_value(self):
         interp, _ = run("dahai x = 3.14")
