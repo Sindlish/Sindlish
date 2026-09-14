@@ -8,11 +8,11 @@
 #   - last resort: plain `pip install --user`
 #
 # Press a packaged binary instead? Download it from the latest GitHub
-# release: https://github.com/AmanatAliPanhwer/Sindlish/releases/latest
+# release: https://github.com/Sindlish/Sindlish/releases/latest
 
 set -euo pipefail
 
-REPO="AmanatAliPanhwer/Sindlish"
+REPO="Sindlish/Sindlish"
 SOURCE_URL="git+https://github.com/${REPO}.git"
 
 if command -v uv >/dev/null 2>&1; then

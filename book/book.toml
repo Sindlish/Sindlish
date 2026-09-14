@@ -17,8 +17,8 @@ preferred-dark-theme = "coal"
 smart-punctuation = true
 mathjax-support = false
 additional-css = ["src/theme/custom.css"]
-git-repository-url = "https://github.com/AmanatAliPanhwer/Sindlish"
-edit-url-template = "https://github.com/AmanatAliPanhwer/Sindlish/edit/main/book/src/{path}"
+git-repository-url = "https://github.com/Sindlish/Sindlish"
+edit-url-template = "https://github.com/Sindlish/Sindlish/edit/main/book/src/{path}"
 additional-js = ["mermaid.min.js", "mermaid-init.js"]
 
 [output.html.search]

@@ -6,7 +6,7 @@ This document describes how to contribute to the Sindlish language, including th
 
 ```bash
 # Clone the repository
-git clone https://github.com/AmanatAliPanhwer/Sindlish.git
+git clone https://github.com/Sindlish/Sindlish.git
 cd Sindlish
 
 # Install dependencies
@@ -21,6 +21,24 @@ python main.py
 # Run benchmarks
 uv run python tools/bench/run.py
 ```
+
+## How Work Is Tracked
+
+All forward work is scheduled as **GitHub issues** grouped under **milestones**;
+the narrative roadmap lives in [`roadmap/ROADMAP.md`](roadmap/ROADMAP.md).
+
+1. **Search first** — check the issues and milestones before starting: your
+   feature may already be scheduled, and your bug may already be logged.
+2. **File via a template** — bugs, feature requests, refactors, docs, questions
+   and security findings each have a dedicated issue template on GitHub.
+3. **Grab a warm-up** — issues labeled `good-first-issue` or `help wanted` are
+   sized for newcomers.
+4. **Claim and link** — comment on the issue to say you're working on it, and
+   reference it from your PR with `Fixes #NN`.
+5. **Use the labels** — every issue carries a `priority:` (P0–P3) and an
+   `area:` label; they're the filters for the board.
+
+Our community standards are defined in the [Code of Conduct](CODE_OF_CONDUCT.md).
 
 ## 10-Step Pipeline for Adding a Feature
 

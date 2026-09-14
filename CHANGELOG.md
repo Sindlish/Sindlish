@@ -2,6 +2,69 @@
 
 All notable changes to Sindlish are documented here. The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [Unreleased]
+
+### Repo infrastructure — GitHub-first work tracking
+
+The project is now tracked entirely through GitHub milestones and issues. The
+standalone `roadmap/FEATURE_ROADMAP.md` and `roadmap/TODO.md` documents have been
+deleted (history preserved in git); `roadmap/ROADMAP.md` is the single canonical
+narrative and points readers to the live milestone board.
+
+#### GitHub project scaffolding
+
+- **Labels**: priority (`P0`–`P3`), area (`core-language`, `stdlib`, `tooling`, `docs`, `vscode-extension`, `packaging-ci`), kind (`language-feature`, `correctness`, `epic`, `experiment`); stale `phase-0..7` labels and the duplicate `good first issue` removed
+- **Milestones**: v0.1.2 — Phase A + Ergonomics, v0.1.3 — Production Trinity, v0.2.0 — Modules & Stdlib, v1.0 — Standalone Language, post-1.0 — The Bumpy Ride
+- **Discussions** enabled
+- **Description, homepage and topics** refreshed
+
+#### Issue templates
+
+| Template | Labels |
+|---|---|
+| 🐛 Bug report | bug — *refit: TODO.md check replaced with issue search* |
+| ✨ Feature request | enhancement, language-feature |
+| 🎯 Task | — (milestone-driven) |
+| 📖 Documentation | documentation |
+| 🔒 Security vulnerability | bug |
+| 💬 Question | question |
+| 🔧 Refactor task | refactor — *phase-0..7 dropdown removed, generalised* |
+
+#### Code of Conduct
+
+- Added `CODE_OF_CONDUCT.md` — Contributor Covenant v2.1
+
+#### Pull request template
+
+- Replaced phase-oriented checklist with issue/milestone-driven workflow;
+  `Fixes #NN` convention, milestone + labels applied to linked issues
+
+#### Stale-URL sweep
+
+- All references to `AmanatAliPanhwer/Sindlish` across repo config, docs,
+  book, and extension updated to `Sindlish/Sindlish`; the VS Code Marketplace
+  publisher field (`AmanatAliPanhwer`) is intentionally unchanged
+
+#### Documentation
+
+- `CONTRIBUTING.md`: new "How Work Is Tracked" section (issues → milestones →
+  labels workflow), clone URL updated, Code of Conduct link added
+- `README.md`: CI/CoC/license shields, "Roadmap & Planning" section linking to
+  milestones + Discussions, Code of Conduct link under License
+- `book/src/*`: all `roadmap/TODO.md` and `FEATURE_ROADMAP.md` references
+  replaced with current pointers (CHANGELOG, closed issues, `ROADMAP.md`)
+- `book/book.toml` and `book/src/appendix-distribution.md`: URLs point to the
+  new org
+- `pyproject.toml`, `install.sh`: upstream URLs updated
+
+### Roadmap
+
+- New canonical narrative in `roadmap/ROADMAP.md`:
+  - v0.1.1 status snapshot, release discipline (Zig-style: incremental release
+    notes, feature-freeze → RC → final tag, backward compat within v0.1.x)
+  - Milestone table with direct links
+  - Label legend and contribution pointers
+
 ## [0.1.1] - 2026-09-10
 
 129 commits since v0.1.0.
@@ -9,8 +72,8 @@ All notable changes to Sindlish are documented here. The format is based on [Kee
 ### Install
 
 ```bash
-uv tool install git+https://github.com/AmanatAliPanhwer/Sindlish.git
-# or: pip install git+https://github.com/AmanatAliPanhwer/Sindlish.git
+uv tool install git+https://github.com/Sindlish/Sindlish.git
+# or: pip install git+https://github.com/Sindlish/Sindlish.git
 sindlish eval "likh('Salam dunya!')"
 ```
 

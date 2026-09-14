@@ -8,13 +8,16 @@
 
 Fixes #___
 
-## Phase checklist
+<!-- If this is a stub (no issue yet): link the milestone at https://github.com/Sindlish/Sindlish/milestones -->
 
-- [ ] `uv run pytest` green **before** this change (baseline noted in PR if Phase 0+)
+## Checklist
+
+- [ ] `uv run pytest` green
 - [ ] Tests added/updated (red → green for bug fixes)
+- [ ] Follows the 10-step pipeline in CONTRIBUTING.md for new language features
 - [ ] Behavior-preserving only, OR clearly marked as behavior change in Summary
 - [ ] Affected book chapter updated (`book/src/…`)
-- [ ] `roadmap/TODO.md` item ticked/annotated (if applicable)
+- [ ] Labels/milestone applied to the linked issue
 
 ## Verification
 

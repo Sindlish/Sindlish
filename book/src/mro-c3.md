@@ -6,7 +6,7 @@
 
 When two parents both define a method, which wins? Answering that question *deterministically, for any family tree* is the Method Resolution Order (MRO). Sindlish implements the same algorithm Python uses — **C3 linearization** — in `_compute_mro`/`_c3_merge` (`interpreter/objects/base.py:67-124`).
 
-Today no built-in type sets `bases`, so this machinery is dormant — but it's the foundation for the planned `jamaat` classes feature. This chapter builds C3 from scratch, walks a real diamond by hand, and ends with **two verified sharp edges** you should know before building on it (both logged in `roadmap/TODO.md`).
+Today no built-in type sets `bases`, so this machinery is dormant — but it's the foundation for the planned `jamaat` classes feature. This chapter builds C3 from scratch, walks a real diamond by hand, and ends with **two verified sharp edges** you should know before building on it (both were found and fixed in the v0.1.1 sweep — see closed issues #17 and #18).
 
 ## 🧠 Mental model: merging waiting lists fairly
 
@@ -64,7 +64,7 @@ B.register_method("hello", from_b)
 B.lookup_method("hello")  # → A.hello  (!!)
 ```
 
-Because B's MRO came out `(A, B)`, the *ancestor* wins — overriding is inverted. Python would produce `(B, A)`. One-line fix direction: prepend `(self,)` to the merge inputs, drop the trailing append. Logged in `roadmap/TODO.md`; must be fixed **before** classes ship.
+Because B's MRO came out `(A, B)`, the *ancestor* wins — overriding is inverted. Python would produce `(B, A)`. One-line fix direction: prepend `(self,)` to the merge inputs, drop the trailing append. Fixed in the v0.1.1 MRO sweep (issue #17) — but read on before classes ship.
 
 ### ⚠️ Sharp edge #2 — impossible hierarchies fail silently
 

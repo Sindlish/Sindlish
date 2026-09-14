@@ -1,4 +1,4 @@
-"""Regression tests for v0.1.2 bug fixes (see roadmap/TODO.md Section 0)."""
+"""Regression tests for the v0.1.1 bug sweep (each fix has a closed issue)."""
 
 import pytest
 
@@ -478,7 +478,7 @@ class TestCallArgResolution:
 
 
 class TestTypeSticks:
-    """The first explicit type on a slot sticks (TODO.md:54).
+    """The first explicit type on a slot sticks (see closed issue #21).
 
     A typed redeclaration of an already-typed function-local slot must raise
     a clean error at the redeclaration site — never corrupt the outer slot's
@@ -581,7 +581,7 @@ class TestLazysilsilo:
 class TestResultSemantics:
     def test_arithmetic_returns_raw_success(self):
         # Successful arithmetic is a raw value (raw = success); only Err
-        # results survive as SdResult. See roadmap/TODO.md on Result boxing.
+        # results survive as SdResult. See CHANGELOG.md (#33) on Result boxing.
         interp, _ = run("x = 2 + 3")
         stored = interp.variables["x"]["value"]
         assert not isinstance(stored, SdResult)

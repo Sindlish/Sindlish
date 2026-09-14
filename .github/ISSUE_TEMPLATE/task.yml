@@ -1,0 +1,44 @@
+name: 🎯 Task
+description: One scoped unit of work cut from a milestone (usually created by maintainers)
+body:
+  - type: textarea
+    id: scope
+    attributes:
+      label: Scope
+      description: Exactly what ships when this is done. Files and symbols touched, if known.
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criteria
+      description: Bullet list of checkable outcomes (tests, book chapter, docs, milestone checkbox).
+    validations:
+      required: true
+  - type: dropdown
+    id: pipeline
+    attributes:
+      label: Pipeline stages touched (best guess)
+      multiple: true
+      options:
+        - Lexer
+        - Parser / AST
+        - Resolver
+        - Compiler
+        - VM
+        - Objects / methods
+        - Tooling
+        - Docs
+  - type: input
+    id: milestone
+    attributes:
+      label: Milestone
+      description: The milestone this task belongs to (your issue template title should start with the version).
+  - type: checkboxes
+    id: rules
+    attributes:
+      label: Ground rules acknowledged
+      options:
+        - label: Tests green before & after; one commit-sized step
+        - label: Follows the 10-step pipeline in CONTRIBUTING.md
+        - label: No behavior change mixed in with refactoring (that's a separate issue)

@@ -1,0 +1,26 @@
+name: 📖 Documentation
+description: Improvements or gaps in the book, offline docs, inline docs, or examples
+labels: ["documentation"]
+body:
+  - type: textarea
+    id: gap
+    attributes:
+      label: What's missing or wrong
+      description: Point to the chapter / command / file. Quote the incorrect text if relevant.
+    validations:
+      required: true
+  - type: dropdown
+    id: target
+    attributes:
+      label: Where should the fix land?
+      options:
+        - book/ (mdBook — canonical docs)
+        - interpreter/offline_docs.txt (sindlish docs command)
+        - README.md / CONTRIBUTING.md / roadmap
+        - examples/ (.sd sample programs)
+        - VS Code extension docs / snippets
+  - type: textarea
+    id: suggestion
+    attributes:
+      label: Suggested fix
+      description: Draft the correction or outline the new section if you have one.

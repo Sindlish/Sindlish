@@ -1,0 +1,23 @@
+name: 💬 Question
+description: Ask about using Sindlish — prefer GitHub Discussions for open-ended questions
+labels: ["question"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        General "how do I…" questions are better asked in
+        [GitHub Discussions](https://github.com/Sindlish/Sindlish/discussions).
+
+        File an issue here when the question is about a **specific behavior** that looks like a
+        bug or a missing feature (and if so, consider the bug report / feature request templates).
+  - type: textarea
+    id: question
+    attributes:
+      label: Your question
+    validations:
+      required: true
+  - type: textarea
+    id: context
+    attributes:
+      label: Context
+      description: What are you trying to do? Include a snippet if useful.

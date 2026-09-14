@@ -29,8 +29,8 @@ flowchart LR
 ./install.sh
 
 # Same thing by hand:
-uv tool install git+https://github.com/AmanatAliPanhwer/Sindlish.git
-pipx install git+https://github.com/AmanatAliPanhwer/Sindlish.git
+uv tool install git+https://github.com/Sindlish/Sindlish.git
+pipx install git+https://github.com/Sindlish/Sindlish.git
 ```
 
 ## Building the binary (`sindlish.spec`)

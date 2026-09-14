@@ -30,10 +30,10 @@ dependencies = [
 sindlish = "interpreter.cli:main"
 
 [project.urls]
-Homepage = "https://github.com/AmanatAliPanhwer/Sindlish"
-Repository = "https://github.com/AmanatAliPanhwer/Sindlish.git"
-Documentation = "https://github.com/AmanatAliPanhwer/Sindlish/tree/main/book"
-Issues = "https://github.com/AmanatAliPanhwer/Sindlish/issues"
+Homepage = "https://github.com/Sindlish/Sindlish"
+Repository = "https://github.com/Sindlish/Sindlish.git"
+Documentation = "https://github.com/Sindlish/Sindlish/tree/main/book"
+Issues = "https://github.com/Sindlish/Sindlish/issues"
 
 # Version is read from interpreter/__init__.py (single source of truth).
 [tool.hatch.version]

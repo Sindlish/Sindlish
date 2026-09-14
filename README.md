@@ -1,5 +1,9 @@
 # Sindlish Programming Language
 
+[![CI](https://github.com/Sindlish/Sindlish/actions/workflows/ci.yml/badge.svg)](https://github.com/Sindlish/Sindlish/actions/workflows/ci.yml)
+[![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.1-4baaaa.svg)](CODE_OF_CONDUCT.md)
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](LICENSE)
+
 Sindlish is a high-level, full-featured programming language designed specifically for the Sindhi-speaking communities. It provides a familiar native-language experience while maintaining a robust, modern syntax and a high-performance bytecode virtual machine backend.
 
 ## Overview
@@ -41,6 +45,13 @@ Access offline documentation from the terminal:
 uv run main.py docs
 ```
 
+## Roadmap & Planning
+
+All forward work is tracked as GitHub issues grouped under
+[**milestones**](https://github.com/Sindlish/Sindlish/milestones). The narrative
+roadmap lives in [`roadmap/ROADMAP.md`](roadmap/ROADMAP.md). Ideas, questions,
+and discussion are welcome in [GitHub Discussions](https://github.com/Sindlish/Sindlish/discussions).
+
 ## Documentation
 
 The canonical documentation is the mdBook in [`book/`](book/) (*Sindlish Internals — A Cozy Field Guide*). Build it locally with `mdbook build book`. The older `docs/` website and `developer-docs/` were removed from the repo; the language reference and walkthroughs all live in the book.
@@ -50,3 +61,5 @@ The canonical documentation is the mdBook in [`book/`](book/) (*Sindlish Interna
 Sindlish is free software, released under the [GNU General Public License, version 3 or (at your option) any later version](LICENSE) (`SPDX: GPL-3.0-or-later`). You can redistribute it and/or modify it under its terms — see the full text in [`LICENSE`](LICENSE) and the copy that ships inside the VS Code extension in [`vscode-extension/LICENSE`](vscode-extension/LICENSE).
 
 Copyright (C) 2026 Amanat Ali Panhwer
+
+Contributions are governed by our [Code of Conduct](CODE_OF_CONDUCT.md).

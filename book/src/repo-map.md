@@ -58,7 +58,7 @@ flowchart TD
 - **`vscode-extension/`** — TextMate grammar plus a small LSP that consumes a mirror-synced copy of the interpreter. `tools/update_extension.bat` refreshes it.
 - **`book/`** — this mdBook; the canonical documentation. (The old `docs/` website submodule and `developer-docs/` were removed.)
 - **`tools/`** — icon generation, grammar generation, lint, the `tools/bench/` cross-language timing harness, and the extension updater.
-- **`roadmap/`** — `ROADMAP.md`, `FEATURE_ROADMAP.md`, `TODO.md`.
+- **`roadmap/`** — `ROADMAP.md` (the narrative); live work tracking lives in [GitHub milestones](https://github.com/Sindlish/Sindlish/milestones).
 
 ## Where do I change…?
 

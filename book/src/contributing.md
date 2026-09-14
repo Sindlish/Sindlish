@@ -61,7 +61,7 @@ The fork in step 8 decides your feature's personality:
 - [ ] error paths produce *pretty* reports (run via CLI once)
 - [ ] bytecode snapshot test if compile output changed — extend `tests/test_golden_bytecode.py` or expect red
 - [ ] book chapter updated (grep `book/src/` for neighbors of your feature)
-- [ ] if you found bugs along the way → `roadmap/TODO.md`
+- [ ] if you found bugs along the way → open a bug report with a repro (GitHub issue)
 
 That's the whole loop: token → tree → slots → bytecode → stack → tests. Every chapter you've read exists to make one of those nine rows feel familiar.
 

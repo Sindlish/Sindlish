@@ -1,0 +1,57 @@
+name: ✨ Feature request
+description: Propose a new Sindlish language feature or runtime capability
+labels: ["enhancement", "language-feature"]
+body:
+  - type: textarea
+    id: motivation
+    attributes:
+      label: Motivation
+      description: What can't users do today that this feature would unlock? Real use case, please.
+    validations:
+      required: true
+  - type: textarea
+    id: syntax
+    attributes:
+      label: Proposed Sindlish syntax
+      description: Sketch the shape you imagine, even roughly. Sindhi words preferred.
+      placeholder: |
+        kaam foo() {
+            // new syntax
+        }
+      render: sd
+  - type: textarea
+    id: behavior
+    attributes:
+      label: Expected behavior
+      description: What should happen, including error cases?
+    validations:
+      required: true
+  - type: checkboxes
+    id: pipeline
+    attributes:
+      label: Pipeline stages you expect this to touch (best guess)
+      options:
+        - label: Lexer (new tokens/keywords)
+        - label: Parser + AST
+        - label: Resolver (names, slots, types)
+        - label: Compiler / bytecode
+        - label: VM runtime
+        - label: Objects / methods
+        - label: Tooling (CLI, REPL, VS Code, docs)
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criteria
+      description: Bullet list of checkable outcomes (goals, not implementation steps).
+  - type: input
+    id: milestone
+    attributes:
+      label: Suggested milestone
+      description: Which version milestone does this belong to? (see roadmap/ROADMAP.md)
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Checks
+      options:
+        - label: Searched existing issues and milestones — this is not filed already
+        - label: Read the relevant book chapter under book/src

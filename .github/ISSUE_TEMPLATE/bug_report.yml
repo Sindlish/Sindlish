@@ -44,5 +44,5 @@ body:
     attributes:
       label: Checks
       options:
-        - label: Not already in roadmap/TODO.md
-        - label: Book chapter for this stage read
+        - label: Searched existing issues and milestones — not already filed
+        - label: Not already logged as a known bug or design decision

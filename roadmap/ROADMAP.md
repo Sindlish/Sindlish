@@ -1,11 +1,11 @@
 # Sindlish — Development Roadmap
 
-**Version:** 0.1.1
-**Status:** Core language usable · 512 tests passing · bytecode VM architecture
+**Version:** 0.1.1 · **Status:** Core language usable · **Tests:** 523 passing
 
-Sindlish runs a classic five-stage pipeline: **Lexer → Parser → Resolver → Compiler → VM**.
-This roadmap tracks what is done and what comes next. Feature-level detail lives in
-[FEATURE_ROADMAP.md](FEATURE_ROADMAP.md); the working checklist lives in [TODO.md](TODO.md).
+> **Live tracking lives on GitHub.** All forward work is broken into issues and
+> grouped under [milestones](https://github.com/Sindlish/Sindlish/milestones).
+> This file is the *narrative* — the "why" and the ordering. For the "what" and
+> "who is working on it", see the milestones.
 
 ---
 
@@ -13,68 +13,59 @@ This roadmap tracks what is done and what comes next. Feature-level detail lives
 
 | Area | Status |
 |---|---|
-| Lexer / Parser / AST | Done — comments (`#`, `/* */`), strings incl. triple-quote, full precedence chain, `{ }` blocks |
+| Lexer / Parser / AST | Done — comments, strings incl. triple-quote, full precedence chain, `{ }` blocks |
 | Types & variables | Done — `adad`, `dahai`, `lafz`, `faislo`, `khali`; 6 declaration styles; `pakko` consts; typed collections |
 | Operators | Done — arithmetic, comparison, logical (`aen`/`ya`/`nah`) |
 | Control flow | Done — `agar`/`yawari`/`warna`, `jistain`, `har … mein`, `tor`, `jari` |
 | Collections | Done — `fehrist`, `lughat`, `majmuo` with ~35 native methods |
-| Functions | Mostly done — `kaam`, typed/default params, `*args`/`**kwargs` in definitions, recursion, implicit return |
+| Functions | Mostly done — `kaam`, typed/default params, `*args`/`**kwargs`, recursion, closures, `bahari` |
 | Result error system | Done — `ok()`/`ghalti()`, postfix `?` / `!!`, `.bachao()`, `.lazmi()`, panic + call-stack tracebacks |
-| Bytecode backend | Done — slot-based locals, static type checks on annotated declarations, shared constant pool |
-| CLI & REPL | Done — `run`/`repl`/`eval`/`tokens`/`ast`/`check`/`docs`/`--version`; highlighted REPL with completions |
-| Tooling & distribution | Done — VS Code extension (grammar, snippets, LSP), Windows/macOS/Linux installers, benchmarks |
+| Bytecode backend | Done — slot-based locals, static type checks, shared constant pool, inlined dispatch |
+| CLI & REPL | Done — `run`/`repl`/`eval`/`tokens`/`ast`/`check`/`docs`/`--version` |
+| Tooling & distribution | Done — VS Code extension, Windows/macOS/Linux installers, benchmarks |
+| Object model | Foundational — `SdType`/`SdShey` with C3 MRO; **dormant until `jamaat` classes ship** |
 
 ---
 
-## Phase A — Correctness & gaps in shipped features (NEXT)
+## Release discipline
 
-Small, high-value items that complete features users already touch:
+- Backward compatible within the **v0.1.x** line; breaking changes only at a deliberate major bump.
+- Releases follow Zig's practice:
+  1. All work lands on `main` as merged feature branches.
+  2. Release notes are written **incrementally** in `roadmap/release-notes/` as features land.
+  3. Feature freeze → tag `vX.Y.Z-rc1` → regression sweep → `rc2` … → final tag.
+  4. Every release ships with long-form, technically-deep release notes.
 
-| Priority | Task | Notes |
+---
+
+## Forward plan (GitHub milestones)
+
+| Milestone | Scope | Home |
 |---|---|---|
-| P0 | Fix keyword arguments at call sites | `f(x = 1)` currently misparses as positional — silently wrong |
-| P0 | Support or reject `bahari` (nonlocal) cleanly | Compiler currently crashes on `NonLocalNode` |
-| P0 | Implement the `match` statement | Keyword/token/AST nodes exist; parsing missing |
-| P1 | Call-site unpacking `f(*list)`, `f(**dict)` | Parsed today, rejected by compiler |
-| P1 | Compound assignment `+= -= *= /=` | Not in lexer yet |
-| P1 | String methods (`ulato`/reverse, `badlo`/replace, …) | `SdString` has dunders but no registered natives |
-| P1 | Slicing `s[1:3]`, `l[1:3]` for strings and lists | |
-| P2 | `likh()` options: `sep=`, `end=` | |
-| P2 | Runtime type check builtin `qisam(x)` | |
-| P2 | Ternary expression | e.g. `(x agar cond warna y)` — syntax TBD |
-| P2 | Enable const/type enforcement inside function bodies | Resolver collects metadata; VM receives `{}` for locals |
+| **v0.1.2 — Phase A + Ergonomics** | `match`, compound assignment, slicing, string methods, ternary `x agar cond warna y`, `likh(sep=, end=)`; then `lambai`, comprehensions, unpacking assignment, deep value-equality, f-strings, extra casts | [milestone/2](https://github.com/Sindlish/Sindlish/milestone/2) |
+| **v0.1.3 — Production Trinity** | File I/O, JSON, `jamaat` classes (constructor, `haso`/self, attribute access, inheritance on the C3 MRO), optional types | [milestone/3](https://github.com/Sindlish/Sindlish/milestone/3) |
+| **v0.2.0 — Modules & Standard Library** | `shamil` import, package search paths; stdlib: math, string utils, date/time, CSV, regex | [milestone/4](https://github.com/Sindlish/Sindlish/milestone/4) |
+| **v1.0 — Standalone Language** | Type aliases, generics, type guards; benchmark-driven VM perf pass; the stability promise | [milestone/5](https://github.com/Sindlish/Sindlish/milestone/5) |
+| **post-1.0 — The Bumpy Ride** | Rust/JIT rewrite experiment (in `tools/`), concurrency, async/await, FFI, networking | [milestone/6](https://github.com/Sindlish/Sindlish/milestone/6) |
+
+Design decisions that need a human call before code carry the `decision` label;
+exploratory prototypes carry `experiment` and are **not** committed to any milestone.
 
 ---
 
-## Phase B — Closures & scoping
+## Labels
 
-- Upvalue/cell variables so nested `kaam` capture enclosing locals
-- Working `bahari` (nonlocal) semantics
-- Decide `aalmi` (global) interaction with function frames
-
-## Phase C — Object-oriented programming
-
-The internal object model already has `SdType`/`SdShey` with C3-linearized MRO lookup;
-user-facing classes build on it:
-
-1. Class declaration (`jamaat`) parser + AST + compiler support
-2. Constructors, `haso`/self handling, attribute access beyond `Result.ok/.ghalti`
-3. Inheritance + method overriding (MRO infra exists)
-4. Encapsulation conventions, properties
-
-## Phase D — Modules & standard library
-
-- `shamil` (import) for multi-file programs
-- Standard library modules: math, string utilities, JSON, file I/O
-- Package layout / search paths
-
-## Phase E — Quality & performance
-
-- Grow test suite alongside every feature above
-- VM throughput work (benchmarks vs Python/Rust live in `tools/bench/`)
-- Consistent error philosophy — **decided 2026-09 (RFC in #33):** all six arithmetic ops return `Result` (parcels) on failure; ordering comparisons raise; equality is total. TODO.md item shipped with #33.
-- Docs website sync (`docs/` submodule) — **done 2026-09:** the `docs/` submodule was removed; the mdBook in `book/` is the canonical documentation
+- **Priority:** `priority: P0` → `priority: P3`
+- **Area:** `area: core-language`, `area: stdlib`, `area: tooling`, `area: docs`, `area: vscode-extension`, `area: packaging-ci`
+- **Kind:** `bug`, `enhancement`, `language-feature`, `correctness`, `refactor`, `documentation`, `perf`, `decision`, `epic`, `experiment`
+- **Entry point:** `good-first-issue`, `help wanted`
 
 ---
 
-*Last updated: September 2026*
+## Pointers
+
+- **Contribute:** [CONTRIBUTING.md](../CONTRIBUTING.md)
+- **Canonical docs:** the mdBook in [`book/`](../book) (*Sindlish Internals — A Cozy Field Guide*)
+- **Discussions:** [GitHub Discussions](https://github.com/Sindlish/Sindlish/discussions)
+
+*Last updated: September 2026 — moved planning to GitHub milestones*

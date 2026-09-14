@@ -1,8 +1,11 @@
 blank_issues_enabled: false
 contact_links:
+  - name: GitHub Discussions
+    url: https://github.com/Sindlish/Sindlish/discussions
+    about: Ask "how do I…" questions and discuss ideas here — preferred for open-ended topics.
   - name: Sindlish Internals Book
-    url: https://github.com/AmanatAliPanhwer/Sindlish/tree/main/book/src
+    url: https://github.com/Sindlish/Sindlish/tree/main/book/src
     about: Read the relevant chapter before filing — most questions are answered there.
-  - name: Roadmap & known bugs
-    url: https://github.com/AmanatAliPanhwer/Sindlish/blob/main/roadmap/TODO.md
-    about: Check here first — your bug may already be logged with a repro.
+  - name: Roadmap & milestones
+    url: https://github.com/Sindlish/Sindlish/milestones
+    about: Check the milestones first — your feature may already be scheduled.

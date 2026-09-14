@@ -32,7 +32,7 @@ with pytest.raises(QisamJeGhalti):
 
 ## Conventions that keep the suite healthy
 
-1. **Bug fixes earn regression tests** — `tests/test_bugfixes.py` mirrors `roadmap/TODO.md`'s fixed-items list; every `[x]` there has a matching test here.
+1. **Bug fixes earn regression tests** — every bug closed in the v0.1.1 sweep has a matching test in `tests/test_bugfixes.py`.
 2. **One concept per test function**, Sindlish snippet as a triple-quoted string at the top — readable even for non-Pythonistas.
 3. **Snapshot bytecode when compiler behavior matters**: compile in the test and compare `(opcode.name, arg)` lists against expected tuples (see [opcodes.md](opcodes.md) for the vocabulary).
 
@@ -41,6 +41,6 @@ with pytest.raises(QisamJeGhalti):
 
 <div class="recap">
 <p>Behavior-level tests over the real pipeline via <code>conftest.run()</code>.</p>
-<p><code>test_bugfixes.py</code> pairs 1:1 with fixed TODO items.</p>
+<p><code>test_bugfixes.py</code> pairs 1:1 with fixed bugs.</p>
 <p>Hardcoded sys.path is a logged wart.</p>
 </div>

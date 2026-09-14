@@ -84,7 +84,7 @@ Strings support both `"…"`/`'…'` and triple quotes for multiline text. Escap
 _ESCAPE_MAP = {"n": "\n", "t": "\t", '"': '"', "\\": "\\", …}
 ```
 
-Why not Python's built-in escape decoding? Because the easy route once mangled non-ASCII text — `"سلام"` became mojibake. The hand-rolled `_unescape()` only touches backslash pairs and copies everything else byte-for-byte. This is recorded as fixed bug #2 in `roadmap/TODO.md`; remember it as a cautionary tale about "just use the stdlib" shortcuts in language tooling.
+Why not Python's built-in escape decoding? Because the easy route once mangled non-ASCII text — `"سلام"` became mojibake. The hand-rolled `_unescape()` only touches backslash pairs and copies everything else byte-for-byte. This was fixed in the v0.1.1 bug sweep (see the CHANGELOG and the closed issues); remember it as a cautionary tale about "just use the stdlib" shortcuts in language tooling.
 
 An unterminated literal raises immediately, with the *opening* position attached:
 

@@ -29,7 +29,7 @@ flowchart TD
 The further down you go, the *tighter* things bind. That's the entire trick. Two details worth pausing on:
 
 - **`^` is right-associative** (`parser.py:622`): `parse_power` recurses into itself for the right side, so `2 ^ 3 ^ 2` means `2 ^ (3 ^ 2) = 512`, while `+`/`*` loop left-to-right.
-- **Unary minus binds tighter than `^`**: `-2 ^ 2` parses as `(-2) ^ 2 = 4`. This differs from Python and is a *documented language convention* — see `roadmap/TODO.md` before "fixing" it.
+- **Unary minus binds tighter than `^`**: `-2 ^ 2` parses as `(-2) ^ 2 = 4`. This differs from Python and is a *documented language convention* — do not "fix" it toward Python's `-4`.
 
 ## 🔬 Under the hood
 
