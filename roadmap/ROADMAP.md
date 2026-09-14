@@ -29,22 +29,79 @@
 
 ## Release discipline
 
-- Backward compatible within the **v0.1.x** line; breaking changes only at a deliberate major bump.
+- Pre-1.0, breaking changes are fair game — the language is still being designed.
+- Versioning is **sequential**: `v0.1.1` → `v0.2.0` → `v0.3.0` → … → `v1.0.0`.
+- Every release is a **deep, meaningful release** — thematically coherent, not a
+  point bump.
+- The **stability promise lands at v1.0.0**: no breaking changes after that.
 
 ---
 
 ## Forward plan (GitHub milestones)
 
-| Milestone | Scope | Home |
-|---|---|---|
-| **v0.1.2 — Phase A + Ergonomics** | `match`, compound assignment, slicing, string methods, ternary `x agar cond warna y`, `likh(sep=, end=)`; then `lambai`, comprehensions, unpacking assignment, deep value-equality, f-strings, extra casts | [milestone/2](https://github.com/Sindlish/Sindlish/milestone/2) |
-| **v0.1.3 — Production Trinity** | File I/O, JSON, `jamaat` classes (constructor, `haso`/self, attribute access, inheritance on the C3 MRO), optional types | [milestone/3](https://github.com/Sindlish/Sindlish/milestone/3) |
-| **v0.2.0 — Modules & Standard Library** | `shamil` import, package search paths; stdlib: math, string utils, date/time, CSV, regex | [milestone/4](https://github.com/Sindlish/Sindlish/milestone/4) |
-| **v1.0 — Standalone Language** | Type aliases, generics, type guards; benchmark-driven VM perf pass; the stability promise | [milestone/5](https://github.com/Sindlish/Sindlish/milestone/5) |
-| **post-1.0 — The Bumpy Ride** | Rust/JIT rewrite experiment (in `tools/`), concurrency, async/await, FFI, networking | [milestone/6](https://github.com/Sindlish/Sindlish/milestone/6) |
+| Milestone | Theme | Scope | Home |
+|---|---|---|---|
+| **v0.2.0 — Expressive Core** | the syntax feels right | ternary, f-strings, comprehensions, lambdas, do-while, deep equality + `is`, compound assignment, slicing, unpacking, string methods, new builtins | [milestone/2](https://github.com/Sindlish/Sindlish/milestone/2) |
+| **v0.3.0 — Data & Serialization** | it reads the real world | file objects + `sang`, bytes type, date/time builtins; JSON, regex, CSV modules | [milestone/3](https://github.com/Sindlish/Sindlish/milestone/3) |
+| **v0.4.0 — Object System** | it models real things | `jamaat` classes, `__bunyaad__`, `haso`, `nasal` inheritance, `walid`, `gun` properties, Sindhi dunders, `abstrak` | [milestone/4](https://github.com/Sindlish/Sindlish/milestone/4) |
+| **v0.5.0 — Modules & Standard Library** | it scales to real projects | `shamil` import system, package search paths, first stdlib modules | [milestone/7](https://github.com/Sindlish/Sindlish/milestone/7) |
+| **v0.6.0 — Type System** | it's safe at scale | optional/nullable, union types, aliases, generics, type checking & inference | [milestone/8](https://github.com/Sindlish/Sindlish/milestone/8) |
+| **v0.7.0 — Concurrency** | it does many things at once | threads/goroutines, channels, async/await, sync primitives | [milestone/9](https://github.com/Sindlish/Sindlish/milestone/9) |
+| **v0.8.0 — FFI & System** | it talks to everything | C FFI, process mgmt, environment, networking | [milestone/10](https://github.com/Sindlish/Sindlish/milestone/10) |
+| **v0.9.0 — Developer Experience** | it's a joy to use | debugger, profiler, formatter, linter, test framework, docs, package manager | [milestone/11](https://github.com/Sindlish/Sindlish/milestone/11) |
+| **v0.10.0 — Performance** | it's fast | bytecode optimizations, JIT experiment, memory improvements | [milestone/12](https://github.com/Sindlish/Sindlish/milestone/12) |
+| **v1.0.0 — The Standalone Language** | it's real | all features stable, backward-compat guarantee, complete docs, deployment story | [milestone/5](https://github.com/Sindlish/Sindlish/milestone/5) |
+| **post-1.0 — The Bumpy Ride** | beyond | Rust/JIT rewrite experiment (in `tools/`), concurrency deepening, FFI, networking | [milestone/6](https://github.com/Sindlish/Sindlish/milestone/6) |
 
 Design decisions that need a human call before code carry the `decision` label;
 exploratory prototypes carry `experiment` and are **not** committed to any milestone.
+
+---
+
+## Settled design decisions (grilling session, 2026-09-14)
+
+### Philosophy
+
+- **Naming:** Sindhi for the core language; external standards keep their names
+  (`json`, `http`, `regex`).
+- **Syntax:** current middle ground — no more ceremony, no less.
+- **Breaking changes:** allowed at any pre-1.0 release.
+
+### v0.2.0 — Expressive Core
+
+| Feature | Settled syntax |
+|---|---|
+| Ternary | `x agar cond warna y` (Sindhi only — `?` is reserved for Result unwrap) |
+| F-strings | `"...{expr}..."` (no prefix) |
+| Comprehensions | `[expr har x mein list]`, filtering with `agar` |
+| Lambda | `kaam(args) wapas expr` |
+| Do-while | `kar { ... } jistain cond` |
+| Equality | `==` deep structural, `is` identity |
+| Functional builtins | `chunta`, `tabdeel`, `jama` — as builtins, not methods |
+
+### v0.3.0 — Data & Serialization
+
+- **Moderate core:** file I/O + date/time built-in; JSON, regex, CSV are modules.
+- **File objects:** `khol(path, mode)` → object with `parho` / `likho` / `band`.
+- **Context manager:** `sang file = khol("x") { ... }` — any object with a
+  `band()` method.
+- **Bytes type:** `b"..."` literals, included in v0.3.0.
+
+### v0.4.0 — Object System
+
+| Concept | Settled syntax |
+|---|---|
+| Constructor | `__bunyaad__` |
+| Inheritance | `jamaat Dog nasal Animal { ... }` |
+| Super | `walid.method()` |
+| Properties | `gun { mil { ... } rak(val) { ... } }` |
+| Abstract | `abstrak jamaat Shape { ... }` |
+
+Dunder methods (16, Sindhi names in `__dunder__` form): `__bunyaad__` (init),
+`__lafz__` (str), `__numaish__` (repr), `__barabar__` (eq), `__cut__` (sub),
+`__zarab__` (mul), `__vand__` (div), `__poorvand__` (floordiv), `__pachi__`
+(mod), `__taqat__` (pow), `__manfi__` (neg), `__musbat__` (pos),
+`__faislo__` (bool), `__silsilo__` (iter), `__aglo__` (next), `__lambai__` (len).
 
 ---
 
@@ -63,4 +120,4 @@ exploratory prototypes carry `experiment` and are **not** committed to any miles
 - **Canonical docs:** the mdBook in [`book/`](../book) (*Sindlish Internals — A Cozy Field Guide*)
 - **Discussions:** [GitHub Discussions](https://github.com/Sindlish/Sindlish/discussions)
 
-*Last updated: September 2026 — moved planning to GitHub milestones*
+*Last updated: September 2026 — milestones restructured to the v0.2.0 → v0.10.0 plan*
