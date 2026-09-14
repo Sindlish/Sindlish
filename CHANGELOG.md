@@ -60,8 +60,7 @@ narrative and points readers to the live milestone board.
 ### Roadmap
 
 - New canonical narrative in `roadmap/ROADMAP.md`:
-  - v0.1.1 status snapshot, release discipline (Zig-style: incremental release
-    notes, feature-freeze → RC → final tag, backward compat within v0.1.x)
+  - v0.1.1 status snapshot and release discipline (backward compat within v0.1.x)
   - Milestone table with direct links
   - Label legend and contribution pointers
 

@@ -30,11 +30,6 @@
 ## Release discipline
 
 - Backward compatible within the **v0.1.x** line; breaking changes only at a deliberate major bump.
-- Releases follow Zig's practice:
-  1. All work lands on `main` as merged feature branches.
-  2. Release notes are written **incrementally** in `roadmap/release-notes/` as features land.
-  3. Feature freeze → tag `vX.Y.Z-rc1` → regression sweep → `rc2` … → final tag.
-  4. Every release ships with long-form, technically-deep release notes.
 
 ---
 
