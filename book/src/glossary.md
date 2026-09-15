@@ -15,6 +15,9 @@ Sindlish reads keywords from **Romanized Sindhi**. You never need to learn the l
 | `har … mein` | *every … in* | for-each loop | `for x in y` |
 | `tor` | *break* | exit loop early | `break` |
 | `jari` | *carry on* | skip to next iteration | `continue` |
+| `bhet` | *meet / encounter* | pattern match | `match` |
+| `haal` | *case / condition* | match arm | `case` |
+| `aa` | *is* | identity comparison | `is` |
 | `kaam` | *work* | function definition | `def` |
 | `wapas` | *give back* | return value | `return` |
 | `aalmi` | *worldly* | global declaration | `global` |
@@ -36,6 +39,7 @@ Sindlish reads keywords from **Romanized Sindhi**. You never need to learn the l
 | `koorh` | *falsehood* | `false` |
 | `khali` | *empty* | null (`None`) |
 | `fehrist` | *catalogue* | list |
+| `jori` | *pair* | tuple — immutable, `(1, 2)` |
 | `lughat` | *dictionary* | dict |
 | `majmuo` | *collection* | set |
 | `ok(value)` | — | wrap a success Result |
@@ -82,6 +86,20 @@ The Python side prefixes everything with **Sd**:
 | `SdResult` | — | Ok/Ghalti enum value |
 | `SdFunction` | `kaam` | compiled function object |
 | `SdRange` | *silsilo* = series | lazy range object |
+| `SdTuple` | `jori` = pair | immutable tuple box |
+
+## v0.2.0 — expressive builtins
+
+| Builtin | Means… | Does |
+|---|---|---|
+| `chunta(fn, list)` | *choose* | filter — keep items where `fn` is true |
+| `tabdeel(fn, list)` | *transform* | map — `fn` over each item |
+| `jama(fn, list)` | *gather* | reduce — fold left, no seed argument |
+| `zbaar(list)` | *instead / in place* | enumerate — `fehrist` of `[index, value]` pairs |
+| `jora(a, b, …)` | *pair up* | zip — `fehrist` of pairs, shortest wins |
+| `badlo(value, qisam)` | *change* | cast between types |
+| `ashl(value)` | *truth* | truthiness (`0`, `khali`, `[]` → `koorh`) |
+| `lambai(value)` | *length* | alias for `lambi` |
 
 <div class="recap">
 <p>Keywords are Romanized Sindhi; <code>ghalti</code> = mistake, <code>shey</code> = thing.</p>

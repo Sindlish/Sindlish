@@ -4,6 +4,20 @@ All notable changes to Sindlish are documented here. The format is based on [Kee
 
 ## [Unreleased]
 
+### SEP standard — self-contained proposals
+
+Every language-change issue is now a **SEP** (Sindlish Enhancement Proposal)
+written to `roadmap/SEP-template.md` — a PEP-grade format with a header pragma
+(SEP number, Author, Status, Type, Milestone, Priority, Created) and the body
+sections Abstract · Motivation · Specification · Backwards compatibility ·
+Implementation plan · Testing · Key references.
+
+- SEPs are **self-contained**: the full design lives in the issue body, with no
+  references to local files. Key references link only to other issues.
+- v0.2.0's 15 design issues rewritten to the SEP standard (issues #46–56,
+  #70–73); 5 new SEPs added (#74–78) for a total of 20 self-contained SEPs;
+  the consolidation spec lives at `roadmap/spec-v0.2.0.md`.
+
 ### Repo infrastructure — GitHub-first work tracking
 
 The project is now tracked entirely through GitHub milestones and issues. The

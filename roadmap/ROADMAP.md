@@ -4,8 +4,10 @@
 
 > **Live tracking lives on GitHub.** All forward work is broken into issues and
 > grouped under [milestones](https://github.com/Sindlish/Sindlish/milestones).
-> This file is the *narrative* — the "why" and the ordering. For the "what" and
-> "who is working on it", see the milestones.
+> Every language-change issue is a self-contained **SEP** (Sindlish
+> Enhancement Proposal) written to the [SEP-template](SEP-template.md)
+> standard. This file is the *narrative* — the "why" and the ordering. For the
+> "what" and "who is working on it", see the milestones.
 
 ---
 
@@ -41,7 +43,7 @@
 
 | Milestone | Theme | Scope | Home |
 |---|---|---|---|
-| **v0.2.0 — Expressive Core** | the syntax feels right | ternary, f-strings, comprehensions, lambdas, do-while, deep equality + `is`, compound assignment, slicing, unpacking, string methods, new builtins | [milestone/2](https://github.com/Sindlish/Sindlish/milestone/2) |
+| **v0.2.0 — Expressive Core** | the syntax feels right | `jori` tuples, `bhet`/`haal` pattern matching, block expressions, chaining comparisons, ternary, f-strings, comprehensions, lambdas, do-while, `==`/`aa`, compound assignment, slicing, unpacking, 38 string methods, `chunta`/`tabdeel`/`jama` + utility builtins, `likh(sep=, end=)` | [milestone/2](https://github.com/Sindlish/Sindlish/milestone/2) · [spec](spec-v0.2.0.md) |
 | **v0.3.0 — Data & Serialization** | it reads the real world | file objects + `sang`, bytes type, date/time builtins; JSON, regex, CSV modules | [milestone/3](https://github.com/Sindlish/Sindlish/milestone/3) |
 | **v0.4.0 — Object System** | it models real things | `jamaat` classes, `__bunyaad__`, `haso`, `nasal` inheritance, `walid`, `gun` properties, Sindhi dunders, `abstrak` | [milestone/4](https://github.com/Sindlish/Sindlish/milestone/4) |
 | **v0.5.0 — Modules & Standard Library** | it scales to real projects | `shamil` import system, package search paths, first stdlib modules | [milestone/7](https://github.com/Sindlish/Sindlish/milestone/7) |
@@ -69,15 +71,29 @@ exploratory prototypes carry `experiment` and are **not** committed to any miles
 
 ### v0.2.0 — Expressive Core
 
+> **Full design: [`roadmap/spec-v0.2.0.md`](spec-v0.2.0.md)** — the definitive reference.
+> This table is the short version.
+
 | Feature | Settled syntax |
 |---|---|
 | Ternary | `x agar cond warna y` (Sindhi only — `?` is reserved for Result unwrap) |
-| F-strings | `"...{expr}..."` (no prefix) |
-| Comprehensions | `[expr har x mein list]`, filtering with `agar` |
+| F-strings | `"...{expr}..."` (no prefix); `{{` escapes a literal `{` |
+| Comprehensions | `[expr har x mein list]`, filtering with trailing `agar`, transform with `agar … warna …`; list/dict/set kinds; multiple iterables zip-style |
 | Lambda | `kaam(args) wapas expr` |
 | Do-while | `kar { ... } jistain cond` |
-| Equality | `==` deep structural, `is` identity |
-| Functional builtins | `chunta`, `tabdeel`, `jama` — as builtins, not methods |
+| Equality | `==` deep structural, `aa` identity |
+| Tuple | `jori` — `(1, 2, 3)`, immutable, `(1,)`, deep-equal, `gharn()`/`jaga()` |
+| Pattern matching | `bhet x { haal 1 { ... } haal _ { ... } }` — literals, `_`, bindings, tuple destructuring |
+| Block expressions | `{ ... }` auto-yield last expr; `:`→dict, commas→set, else block; vars leak; `wapas` illegal inside |
+| Chaining comparisons | `a < b <= c`, mixed operators, method calls |
+| Compound assignment | `+= -= *= /= %= ^=` (power is `^`, so no `**`) |
+| Slicing | `list[a:b:c]`, negative indices, copy not view, on fehrist/lafz/jori |
+| Unpacking | `a, b = [...]`, `a, *rest = [...]`, swap, strings unpack, eval-RHS-then-store |
+| String methods | 38, all Sindhi-named; `warha()`→fehrist, `gadh()` accepts fehrist or jori |
+| Functional builtins | `chunta(cond_fn, list)`, `tabdeel(fn, list)`, `jama(fn, list)` — function-first |
+| Utility builtins | `zbaar` (enumerate), `jora` (zip), `badlo` (cast), `ashl` (truthiness), `lambai` (len alias) |
+| `likh` kwargs | `likh("a", "b", sep=", ", end="!\n")` |
+| Break / continue | `tor` = break, `jari` = continue (unchanged; `bhet` is the match keyword) |
 
 ### v0.3.0 — Data & Serialization
 
