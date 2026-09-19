@@ -72,6 +72,7 @@ class SimpleBuiltins:
     @register(functions)
     def likh(self, args, kwargs=None):
         """Print values to stdout, joined with ``sep`` and finished with ``end``."""
+        kwargs = {} if kwargs is None else kwargs
         sep = str(kwargs.get("sep", SdString(" ")))
         end = str(kwargs.get("end", SdString("\n")))
         print(*(str(arg) for arg in args), sep=sep, end=end)
