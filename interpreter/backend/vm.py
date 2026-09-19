@@ -125,13 +125,10 @@ class VM:
         # handler must be named ``_op_<name.lower()>``. A missing handler is
         # a programming error surfaced immediately at construction.
         self.dispatch_table: DispatchTable = {
-            opcode: getattr(self, f"_op_{opcode.name.lower()}")
-            for opcode in OpCode
+            opcode: getattr(self, f"_op_{opcode.name.lower()}") for opcode in OpCode
         }
 
-        self._dispatch: list[OpcodeHandler | None] = [
-            None
-        ] * (int(max(OpCode)) + 1)
+        self._dispatch: list[OpcodeHandler | None] = [None] * (int(max(OpCode)) + 1)
         for opcode, handler in self.dispatch_table.items():
             self._dispatch[int(opcode)] = handler
 
@@ -198,9 +195,7 @@ class VM:
                         self.code_string,
                     )
             case TokenType.DAHAI:
-                if not isinstance(value, SdNumber) or not isinstance(
-                    value.value, float
-                ):
+                if not isinstance(value, SdNumber) or not isinstance(value.value, float):
                     raise QisamJeGhalti(
                         f"'dahai' qisam laai dahai khapyo paye, par '{value.type.name}' milyo.",
                         line,
@@ -268,7 +263,12 @@ class VM:
                         )
 
     def _check_element_type(
-        self, value: object, element_type: object, line: int = 0, column: int = 0, container_name: str = "Fehrist"
+        self,
+        value: object,
+        element_type: object,
+        line: int = 0,
+        column: int = 0,
+        container_name: str = "Fehrist",
     ) -> None:
         if isinstance(value, SdResult) and value.is_ok():
             value = value.value
@@ -282,9 +282,7 @@ class VM:
                         self.code_string,
                     )
             case TokenType.DAHAI:
-                if not isinstance(value, SdNumber) or not isinstance(
-                    value.value, float
-                ):
+                if not isinstance(value, SdNumber) or not isinstance(value.value, float):
                     raise QisamJeGhalti(
                         f"{container_name} je element jo qisam 'dahai' hujjhan lazmi aahe, par '{value.type.name}' milyo.",
                         line,
@@ -339,9 +337,7 @@ class VM:
                 while pc < n_instr:
                     opcode, arg = instructions[pc]
                     frame.ip = pc + 1
-                    line, column = (
-                        line_col[pc] if 0 <= pc < n_line else (0, 0)
-                    )
+                    line, column = line_col[pc] if 0 <= pc < n_line else (0, 0)
                     dispatch[opcode](frame, arg, line, column)
                     if opcode in frame_changers and self.frames[-1] is not frame:
                         break
@@ -372,9 +368,7 @@ class VM:
             if line == 0:
                 continue
 
-            source_line = (
-                source_lines[line - 1] if 0 < line <= len(source_lines) else None
-            )
+            source_line = source_lines[line - 1] if 0 < line <= len(source_lines) else None
             error.add_traceback(frame.name, line, col, source_line)
 
     def _handle_result(self, result: object) -> object:
@@ -396,9 +390,7 @@ class VM:
         if handler:
             handler(frame, arg, line, column)
         else:
-            raise HalndeVaktGhalti(
-                f"Na-maloom opcode: {opcode}.", line, column, self.code_string
-            )
+            raise HalndeVaktGhalti(f"Na-maloom opcode: {opcode}.", line, column, self.code_string)
 
     # ===== OpCode Handlers =====
 
@@ -463,22 +455,14 @@ class VM:
                 )
             if expected_type is None:
                 expected_type = record.type
-                element_type = (
-                    element_type if expected_type is None else record.element_type
-                )
+                element_type = element_type if expected_type is None else record.element_type
             if expected_type is not None:
-                self._check_type(
-                    val, expected_type, element_type, line=line, column=column
-                )
+                self._check_type(val, expected_type, element_type, line=line, column=column)
             record.value = val
         else:
             if expected_type is not None:
-                self._check_type(
-                    val, expected_type, element_type, line=line, column=column
-                )
-            self.globals.define(
-                name, val, var_type=expected_type, is_const=is_const
-            )
+                self._check_type(val, expected_type, element_type, line=line, column=column)
+            self.globals.define(name, val, var_type=expected_type, is_const=is_const)
 
     def _op_push_null(self, frame: BytecodeFrame, arg: object, line: int, column: int) -> None:
         """Push ``SdNull()`` (``< -- null``)."""
@@ -547,9 +531,7 @@ class VM:
         self, left: object, right: object, dunder: str, line: int, column: int
     ) -> object:
         try:
-            out = left.call_method(
-                dunder, [right], LocationProxy(line, column), self.code_string
-            )
+            out = left.call_method(dunder, [right], LocationProxy(line, column), self.code_string)
         except SindhiBaseError as e:
             if e.line is None:
                 e.line, e.column, e.code_string = line, column, self.code_string
@@ -568,9 +550,7 @@ class VM:
         if isinstance(left, SdNumber) and isinstance(right, SdNumber):
             self.stack.append(SdNumber(left.value + right.value))
         else:
-            self.stack.append(
-                self._binary_op_result(left, right, "__add__", line, column)
-            )
+            self.stack.append(self._binary_op_result(left, right, "__add__", line, column))
 
     def _op_binary_sub(self, frame: BytecodeFrame, arg: object, line: int, column: int) -> None:
         """Pop ``left`` and ``right``; push ``left - right`` (others: see dunder)."""
@@ -578,9 +558,7 @@ class VM:
         if isinstance(left, SdNumber) and isinstance(right, SdNumber):
             self.stack.append(SdNumber(left.value - right.value))
         else:
-            self.stack.append(
-                self._binary_op_result(left, right, "__sub__", line, column)
-            )
+            self.stack.append(self._binary_op_result(left, right, "__sub__", line, column))
 
     def _op_binary_mul(self, frame: BytecodeFrame, arg: object, line: int, column: int) -> None:
         """Pop ``left`` and ``right``; push ``left * right`` (others: see dunder)."""
@@ -588,23 +566,15 @@ class VM:
         if isinstance(left, SdNumber) and isinstance(right, SdNumber):
             self.stack.append(SdNumber(left.value * right.value))
         else:
-            self.stack.append(
-                self._binary_op_result(left, right, "__mul__", line, column)
-            )
+            self.stack.append(self._binary_op_result(left, right, "__mul__", line, column))
 
     def _op_binary_div(self, frame: BytecodeFrame, arg: object, line: int, column: int) -> None:
         """Pop ``left`` and ``right``; push ``left / right`` (others: see dunder)."""
         left, right = self._pop_pair(line, column)
-        if (
-            isinstance(left, SdNumber)
-            and isinstance(right, SdNumber)
-            and right.value != 0
-        ):
+        if isinstance(left, SdNumber) and isinstance(right, SdNumber) and right.value != 0:
             self.stack.append(SdNumber(left.value / right.value))
         else:
-            self.stack.append(
-                self._binary_op_result(left, right, "__truediv__", line, column)
-            )
+            self.stack.append(self._binary_op_result(left, right, "__truediv__", line, column))
 
     def _op_binary_pow(self, frame: BytecodeFrame, arg: object, line: int, column: int) -> None:
         """Pop ``left`` and ``right``; push ``left ** right`` (others: see dunder)."""
@@ -612,23 +582,15 @@ class VM:
         if isinstance(left, SdNumber) and isinstance(right, SdNumber):
             self.stack.append(SdNumber(left.value**right.value))
         else:
-            self.stack.append(
-                self._binary_op_result(left, right, "__pow__", line, column)
-            )
+            self.stack.append(self._binary_op_result(left, right, "__pow__", line, column))
 
     def _op_binary_mod(self, frame: BytecodeFrame, arg: object, line: int, column: int) -> None:
         """Pop ``left`` and ``right``; push ``left % right`` (others: see dunder)."""
         left, right = self._pop_pair(line, column)
-        if (
-            isinstance(left, SdNumber)
-            and isinstance(right, SdNumber)
-            and right.value != 0
-        ):
+        if isinstance(left, SdNumber) and isinstance(right, SdNumber) and right.value != 0:
             self.stack.append(SdNumber(left.value % right.value))
         else:
-            self.stack.append(
-                self._binary_op_result(left, right, "__mod__", line, column)
-            )
+            self.stack.append(self._binary_op_result(left, right, "__mod__", line, column))
 
     def _op_compare_eq(self, frame: BytecodeFrame, arg: object, line: int, column: int) -> None:
         """Pop ``left`` and ``right``; push ``left == right``."""
@@ -636,9 +598,7 @@ class VM:
         if isinstance(left, SdNumber) and isinstance(right, SdNumber):
             self.stack.append(SdBool(left.value == right.value))
         else:
-            self.stack.append(
-                left.call_method("__eq__", [right], None, self.code_string)
-            )
+            self.stack.append(left.call_method("__eq__", [right], None, self.code_string))
 
     def _op_compare_ne(self, frame: BytecodeFrame, arg: object, line: int, column: int) -> None:
         """Pop ``left`` and ``right``; push ``left != right``."""
@@ -646,9 +606,7 @@ class VM:
         if isinstance(left, SdNumber) and isinstance(right, SdNumber):
             self.stack.append(SdBool(left.value != right.value))
         else:
-            self.stack.append(
-                left.call_method("__ne__", [right], None, self.code_string)
-            )
+            self.stack.append(left.call_method("__ne__", [right], None, self.code_string))
 
     def _op_compare_lt(self, frame: BytecodeFrame, arg: object, line: int, column: int) -> None:
         """Pop ``left`` and ``right``; push ``left < right``."""
@@ -656,9 +614,7 @@ class VM:
         if isinstance(left, SdNumber) and isinstance(right, SdNumber):
             self.stack.append(SdBool(left.value < right.value))
         else:
-            self.stack.append(
-                left.call_method("__lt__", [right], None, self.code_string)
-            )
+            self.stack.append(left.call_method("__lt__", [right], None, self.code_string))
 
     def _op_compare_le(self, frame: BytecodeFrame, arg: object, line: int, column: int) -> None:
         """Pop ``left`` and ``right``; push ``left <= right``."""
@@ -666,9 +622,7 @@ class VM:
         if isinstance(left, SdNumber) and isinstance(right, SdNumber):
             self.stack.append(SdBool(left.value <= right.value))
         else:
-            self.stack.append(
-                left.call_method("__le__", [right], None, self.code_string)
-            )
+            self.stack.append(left.call_method("__le__", [right], None, self.code_string))
 
     def _op_compare_gt(self, frame: BytecodeFrame, arg: object, line: int, column: int) -> None:
         """Pop ``left`` and ``right``; push ``left > right``."""
@@ -676,9 +630,7 @@ class VM:
         if isinstance(left, SdNumber) and isinstance(right, SdNumber):
             self.stack.append(SdBool(left.value > right.value))
         else:
-            self.stack.append(
-                left.call_method("__gt__", [right], None, self.code_string)
-            )
+            self.stack.append(left.call_method("__gt__", [right], None, self.code_string))
 
     def _op_compare_ge(self, frame: BytecodeFrame, arg: object, line: int, column: int) -> None:
         """Pop ``left`` and ``right``; push ``left >= right``."""
@@ -686,9 +638,7 @@ class VM:
         if isinstance(left, SdNumber) and isinstance(right, SdNumber):
             self.stack.append(SdBool(left.value >= right.value))
         else:
-            self.stack.append(
-                left.call_method("__ge__", [right], None, self.code_string)
-            )
+            self.stack.append(left.call_method("__ge__", [right], None, self.code_string))
 
     def _op_logical_not(self, frame: BytecodeFrame, arg: object, line: int, column: int) -> None:
         """Pop a value; push its truthy negation (``value -- > not value``)."""
@@ -705,7 +655,9 @@ class VM:
         if not sd_truthy(condition):
             frame.ip = arg
 
-    def _op_jump_if_false_or_pop(self, frame: BytecodeFrame, arg: object, line: int, column: int) -> None:
+    def _op_jump_if_false_or_pop(
+        self, frame: BytecodeFrame, arg: object, line: int, column: int
+    ) -> None:
         """Peek top value; pop it if truthy, else jump to ``arg``."""
         condition = self._unwrap_val(self.stack[-1], line, column)
         if sd_truthy(condition):
@@ -713,7 +665,9 @@ class VM:
         else:
             frame.ip = arg
 
-    def _op_jump_if_true_or_pop(self, frame: BytecodeFrame, arg: object, line: int, column: int) -> None:
+    def _op_jump_if_true_or_pop(
+        self, frame: BytecodeFrame, arg: object, line: int, column: int
+    ) -> None:
         """Peek top value; jump to ``arg`` if truthy, else pop it."""
         condition = self._unwrap_val(self.stack[-1], line, column)
         if sd_truthy(condition):
@@ -774,19 +728,16 @@ class VM:
         name = getattr(callee, "name", None) or "<expression>"
         self._invoke(callee, positional, kwargs, name, line, column)
 
-    def _invoke(self, func: object, positional: list, kwargs: dict, name: str, line: int, column: int) -> None:
+    def _invoke(
+        self, func: object, positional: list, kwargs: dict, name: str, line: int, column: int
+    ) -> None:
         if isinstance(func, SdFunction):
             self._call_sd_function(func, positional, kwargs, line, column)
         else:
-            if kwargs:
-                raise QisamJeGhalti(
-                    f"'{name}' keyword arguments support natho kando.",
-                    line,
-                    column,
-                    self.code_string,
-                )
             try:
-                result = func(self.simple_handler, positional)
+                if kwargs:
+                    kwargs = self.simple_handler.resolve_kwargs(name, kwargs)
+                result = func(self.simple_handler, positional, kwargs)
                 self.push(result if result is not None else SdNull())
             except SindhiBaseError as e:
                 if e.line is None:
@@ -877,7 +828,9 @@ class VM:
                 i += 1
         return positional, kwargs
 
-    def _call_sd_function(self, func, positional: list, kwargs: dict, line: int, column: int) -> object:
+    def _call_sd_function(
+        self, func, positional: list, kwargs: dict, line: int, column: int
+    ) -> object:
         plan = func.call_plan
         if plan is None:
             plan = CallPlan(func.params, func.defaults, func.cell_names)
@@ -1090,11 +1043,7 @@ class VM:
                 bound_cells = []
                 for depth, name in func.free_specs:
                     idx = defining.cell_map.get(name)
-                    if (
-                        idx is None
-                        or idx >= len(defining.cells)
-                        or defining.cells[idx] is None
-                    ):
+                    if idx is None or idx >= len(defining.cells) or defining.cells[idx] is None:
                         raise HalndeVaktGhalti(
                             f"'{name}' laai baharli kaam je cell natho milio.",
                             line,
@@ -1169,9 +1118,7 @@ class VM:
         elif attr_name == "ghalti":
             self.push(SdNull())
         else:
-            raise NaleJeGhalti(
-                f"Attribute {attr_name} na milyo.", line, column, self.code_string
-            )
+            raise NaleJeGhalti(f"Attribute {attr_name} na milyo.", line, column, self.code_string)
 
     def _op_make_ok(self, frame: BytecodeFrame, arg: object, line: int, column: int) -> None:
         """Pop a value; push it wrapped as an Ok result (``< -- Ok``)."""
@@ -1182,9 +1129,7 @@ class VM:
         """Pop a value; push it wrapped as a Ghalti result (``< -- Ghalti``)."""
         val = self.pop()
         self.push(
-            val
-            if isinstance(val, SdResult) and val.is_error()
-            else SdResult(SdResult.GHALTI, val)
+            val if isinstance(val, SdResult) and val.is_error() else SdResult(SdResult.GHALTI, val)
         )
 
     def _op_call_bachao(self, frame: BytecodeFrame, arg: object, line: int, column: int) -> None:
@@ -1229,7 +1174,9 @@ class VM:
             return
         self.push(result.value if result.is_ok() else result)
 
-    def _op_postfix_bangbang(self, frame: BytecodeFrame, arg: object, line: int, column: int) -> None:
+    def _op_postfix_bangbang(
+        self, frame: BytecodeFrame, arg: object, line: int, column: int
+    ) -> None:
         """Pop a result; push its Ok value or raise the Ghalti error."""
         result = self.pop()
         if not isinstance(result, SdResult):
@@ -1252,9 +1199,7 @@ class VM:
         """Pop a message and raise a runtime error (``message -- >``)."""
         message = self.pop()
         msg_val = (
-            message.value
-            if isinstance(message, (SdString, SdNumber, SdBool))
-            else str(message)
+            message.value if isinstance(message, (SdString, SdNumber, SdBool)) else str(message)
         )
         raise HalndeVaktGhalti(msg_val, line, column, self.code_string)
 
@@ -1313,9 +1258,7 @@ class VM:
 
             elif target_type == TokenType.FAISLO:
                 # Booleans are already truthy/falsy in Python
-                self.push(
-                    SdBool(bool(value.value if hasattr(value, "value") else value))
-                )
+                self.push(SdBool(bool(value.value if hasattr(value, "value") else value)))
 
             elif target_type == TokenType.FEHRIST:
                 if isinstance(value, (SdList, SdSet)):
@@ -1398,13 +1341,17 @@ class VM:
                 )
         self.push(SdSet(elements))
 
-    def _op_binary_subscript(self, frame: BytecodeFrame, arg: object, line: int, column: int) -> None:
+    def _op_binary_subscript(
+        self, frame: BytecodeFrame, arg: object, line: int, column: int
+    ) -> None:
         """Pop index and object; push ``obj[idx]`` (``< -- element``)."""
         idx = self._unwrap_val(self.pop(), line, column)
         obj = self._unwrap_val(self.pop(), line, column)
         self.push(obj.call_method("__getitem__", [idx], None, self.code_string))
 
-    def _op_store_subscript(self, frame: BytecodeFrame, arg: object, line: int, column: int) -> None:
+    def _op_store_subscript(
+        self, frame: BytecodeFrame, arg: object, line: int, column: int
+    ) -> None:
         """Pop value, index, and object; store ``obj[idx] = val`` and push ``val``."""
         val = self._unwrap_val(self.pop(), line, column)
         idx = self._unwrap_val(self.pop(), line, column)
