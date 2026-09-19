@@ -316,9 +316,9 @@ class TestCallArgs:
         with pytest.raises(MatalabJeGhalti, match="wadhoo"):
             run("kaam f(a) { wapas a }\nf(1, 2)")
 
-    def test_builtin_rejects_kwargs(self):
-        with pytest.raises(QisamJeGhalti):
-            run('likh("x", sep = "-")')
+    def test_builtin_unknown_kwarg_raises(self):
+        with pytest.raises(MatalabJeGhalti, match="Achanak keyword"):
+            run('likh("x", bogus=1)')
 
 
 class TestCollectionsAndBuiltins:
