@@ -10,7 +10,7 @@ Builtins are seeded into this environment at startup (`tests/conftest.py` shows 
 
 | Builtin | Behavior notes |
 |---|---|
-| `likh(...)` | space-separated print; does **not** consume Results |
+| `likh(values..., sep=" ", end="\n")` | joins values with `sep`, finishes with `end`; does **not** consume Results |
 | `puch(prompt)` | returns `SdString` |
 | `lambi(x)` | works on strings, lists/dicts/sets, ranges |
 | `silsilo(a[,b[,c]])` | returns **lazy** `SdRange` (O(1) length, indexable) |

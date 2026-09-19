@@ -314,6 +314,19 @@ PROGRAMS = [
             ("HALT", None),
         ),
     ),
+    (
+        "builtin_kwarg_call",
+        'likh("a", "b", sep="-")',
+        (
+            ("LOAD_CONST", 0),
+            ("LOAD_CONST", 1),
+            ("LOAD_CONST", 2),
+            ("LOAD_CONST", 3),
+            ("CALL_FUNCTION", (4, 4, True)),
+            ("POP_TOP", None),
+            ("HALT", None),
+        ),
+    ),
 ]
 
 

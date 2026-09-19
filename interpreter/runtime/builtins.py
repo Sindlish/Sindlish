@@ -25,8 +25,27 @@ class SimpleBuiltins:
 
     functions: ClassVar[dict] = {}
 
+    # Registered-name -> {keyword argument: default value}. The VM validates
+    # every keyword against this spec, fills defaults, then hands the bound
+    # kwargs dict to the builtin. Builtins absent from this mapping reject
+    # all keyword arguments.
+    kwarg_specs: ClassVar[dict] = {
+        "likh": {"sep": SdString(" "), "end": SdString("\n")},
+    }
+
+    @staticmethod
+    def resolve_kwargs(name, kwargs: dict) -> dict:
+        """Reject unknown names and fill declared defaults for a builtin call."""
+        spec = SimpleBuiltins.kwarg_specs.get(name, {})
+        for key in kwargs:
+            if key not in spec:
+                raise MatalabJeGhalti(f"Achanak keyword argument '{key}' milo.")
+        for key, default in spec.items():
+            kwargs.setdefault(key, default)
+        return kwargs
+
     @register(functions)
-    def majmuo(self, args):
+    def majmuo(self, args, kwargs=None):
         """Create a new set from arguments."""
         if len(args) == 0:
             return SdSet(set())
@@ -35,7 +54,7 @@ class SimpleBuiltins:
         raise MatalabJeGhalti("majmuo() khe 0 ya 1 argument khapay.")
 
     @register(functions)
-    def lambi(self, args):
+    def lambi(self, args, kwargs=None):
         """Return the length of a collection or string."""
         if len(args) != 1:
             raise MatalabJeGhalti("lambi() khe sirf 1 argument khapay.")
@@ -51,19 +70,22 @@ class SimpleBuiltins:
         raise QisamJeGhalti(f"'{obj.type.name}' ji lambai nathi mapay saghjay.")
 
     @register(functions)
-    def likh(self, args):
-        """Print values to stdout."""
-        print(*(str(arg) for arg in args))
+    def likh(self, args, kwargs=None):
+        """Print values to stdout, joined with ``sep`` and finished with ``end``."""
+        kwargs = {} if kwargs is None else kwargs
+        sep = str(kwargs.get("sep", SdString(" ")))
+        end = str(kwargs.get("end", SdString("\n")))
+        print(*(str(arg) for arg in args), sep=sep, end=end)
         return SdNull()
 
     @register(functions)
-    def puch(self, args):
+    def puch(self, args, kwargs=None):
         """Takes input from user."""
         prompt = " ".join(str(arg) for arg in args)
         return SdString(input(prompt))
 
     @register(functions)
-    def silsilo(self, args):
+    def silsilo(self, args, kwargs=None):
         """Return a lazy range of numbers from start (inclusive) to end (exclusive) with step."""
         for i, arg in enumerate(args):
             if not isinstance(arg, SdNumber):
@@ -73,8 +95,7 @@ class SimpleBuiltins:
                 )
             if not isinstance(arg.value, int):
                 raise QisamJeGhalti(
-                    f"silsilo() khe '{i + 1}jo' argument 'adad' khapyo paye, par "
-                    f"'dahai' milyo."
+                    f"silsilo() khe '{i + 1}jo' argument 'adad' khapyo paye, par 'dahai' milyo."
                 )
         if len(args) == 1:
             start, end, step = 0, int(args[0].value), 1
@@ -94,17 +115,14 @@ class SimpleBuiltins:
         return SdRange(start, end, step)
 
     @register(functions)
-    def qisam(self, args):
+    def qisam(self, args, kwargs=None):
         """Returns the type of the object."""
         if len(args) != 1:
             raise MatalabJeGhalti("qisam() khe sirf 1 argument khapay.")
         try:
             return SdString(args[0].type.name)
         except AttributeError:
-            raise HalndeVaktGhalti(
-                "qisam() builtins jo qisam natho bodaey sghe."
-            ) from None
-
+            raise HalndeVaktGhalti("qisam() builtins jo qisam natho bodaey sghe.") from None
 
     def get_all(self):
         """Return all registered built-in functions."""
