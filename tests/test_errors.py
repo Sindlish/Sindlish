@@ -64,7 +64,7 @@ class TestImmutableKeyInSet:
     def test_mutable_value_in_set_raises(self):
         """Lists are mutable and cannot be added to a set."""
         with pytest.raises(QisamJeGhalti):
-            run("x = {1, 2}\nx.addkar([1, 2])")
+            run("x = {1, 2}\nx.shamil([1, 2])")
 
 
 class TestUndefinedFunction:

@@ -1,6 +1,6 @@
 from ..errors import (
     HalndeVaktGhalti,
-    IndexJeGhalti,
+    JagaJeGhalti,
     NaleJeGhalti,
     QisamJeGhalti,
     SindhiBaseError,
@@ -290,7 +290,7 @@ class SdShey:
             except TypeError as e:
                 raise QisamJeGhalti(str(e), line, column, code)
             except IndexError as e:
-                raise IndexJeGhalti(str(e), line, column, code)
+                raise JagaJeGhalti(str(e), line, column, code)
             except ZeroDivisionError as e:
                 raise ZeroVindJeGhalti(str(e), line, column, code)
             except Exception as e:  # noqa: BLE001 - any unexpected protocol error -> runtime
@@ -314,7 +314,7 @@ class SdShey:
         except TypeError as e:
             raise QisamJeGhalti(str(e), line, column, code)
         except IndexError as e:
-            raise IndexJeGhalti(str(e), line, column, code)
+            raise JagaJeGhalti(str(e), line, column, code)
         except ZeroDivisionError as e:
             raise ZeroVindJeGhalti(str(e), line, column, code)
         except Exception as e:  # noqa: BLE001 - any unexpected method error -> runtime

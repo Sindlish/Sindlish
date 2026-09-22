@@ -58,7 +58,7 @@ val = operation()!!         # Panic unwrap, crashes on error
 
 7. BUILT-IN FUNCTIONS
 ---------------------
-likh(values..., sep=" ", end="\n") : Prints values, sep between them, end after
+likh(values..., vich=" ", akhir="\n") : Prints values, vich between them, akhir after
 puch(msg)   : Takes user input
 lambi(x)    : Returns the length of collection x
 silsilo(n)  : Lazy range 0..n (start, end, step variants)

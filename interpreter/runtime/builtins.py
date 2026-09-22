@@ -30,7 +30,7 @@ class SimpleBuiltins:
     # kwargs dict to the builtin. Builtins absent from this mapping reject
     # all keyword arguments.
     kwarg_specs: ClassVar[dict] = {
-        "likh": {"sep": SdString(" "), "end": SdString("\n")},
+        "likh": {"vich": SdString(" "), "akhir": SdString("\n")},
     }
 
     @staticmethod
@@ -71,10 +71,10 @@ class SimpleBuiltins:
 
     @register(functions)
     def likh(self, args, kwargs=None):
-        """Print values to stdout, joined with ``sep`` and finished with ``end``."""
+        """Print values to stdout, joined with ``vich`` and finished with ``akhir``."""
         kwargs = {} if kwargs is None else kwargs
-        sep = str(kwargs.get("sep", SdString(" ")))
-        end = str(kwargs.get("end", SdString("\n")))
+        sep = str(kwargs.get("vich", SdString(" ")))
+        end = str(kwargs.get("akhir", SdString("\n")))
         print(*(str(arg) for arg in args), sep=sep, end=end)
         return SdNull()
 

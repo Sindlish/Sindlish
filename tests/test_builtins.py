@@ -43,41 +43,45 @@ class TestLikhFunction:
 
 
 class TestLikhKwargs:
-    """likh(sep=, end=) keyword arguments (SEP 78)."""
+    """likh(vich=, akhir=) keyword arguments (SEP 78, SEP 80)."""
 
     def test_default_behavior_unchanged(self):
         _, out = run('likh("a", "b")')
         assert out == "a b\n"
 
-    def test_custom_sep(self):
-        _, out = run('likh("a", "b", sep=", ")')
+    def test_custom_vich(self):
+        _, out = run('likh("a", "b", vich=", ")')
         assert out == "a, b\n"
 
-    def test_custom_end(self):
-        _, out = run('likh("a", "b", end="!")')
+    def test_custom_akhir(self):
+        _, out = run('likh("a", "b", akhir="!")')
         assert out == "a b!"
 
     def test_no_newline_continuation(self):
-        _, out = run('likh("a", end="")\nlikh("b")')
+        _, out = run('likh("a", akhir="")\nlikh("b")')
         assert out == "ab\n"
 
-    def test_single_value_ignores_sep(self):
-        # sep only sits between values; with a single value it is discarded
-        _, out = run('likh("solo", sep=", ")')
+    def test_single_value_ignores_vich(self):
+        # vich only sits between values; with a single value it is discarded
+        _, out = run('likh("solo", vich=", ")')
         assert out == "solo\n"
 
-    def test_single_value_with_end(self):
-        _, out = run('likh("solo", end="!\n")')
+    def test_single_value_with_akhir(self):
+        _, out = run('likh("solo", akhir="!\n")')
         assert out == "solo!\n"
 
     def test_kwargs_dict_splat(self):
-        _, out = run('k = {"sep": "-"}\nlikh("a", "b", **k)')
+        _, out = run('k = {"vich": "-"}\nlikh("a", "b", **k)')
         assert out == "a-b\n"
 
     def test_positional_third_arg_is_a_printed_value(self):
-        # sep/end are keyword-only; a third positional is just another value
+        # vich/akhir are keyword-only; a third positional is just another value
         _, out = run('likh("a", "b", "-")')
         assert out == "a b -\n"
+
+    def test_old_sep_kwarg_raises(self):
+        with pytest.raises(MatalabJeGhalti, match="Achanak keyword"):
+            run('likh("x", sep=", ")')
 
     def test_unknown_kwarg_raises(self):
         with pytest.raises(MatalabJeGhalti, match="Achanak keyword"):

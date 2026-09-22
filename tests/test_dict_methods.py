@@ -43,15 +43,15 @@ class TestSyon:
         assert extract_value(interp.variables["val"]["value"]) == [["a", 1]]
 
 
-class TestUpdate:
+class TestMilap:
     """update"""
 
-    def test_update_adds_keys(self):
-        interp, _ = run('x = {"a": 1}\nx.update({"b": 2})')
+    def test_milap_adds_keys(self):
+        interp, _ = run('x = {"a": 1}\nx.milap({"b": 2})')
         assert extract_value(interp.variables["x"]["value"]) == {"a": 1, "b": 2}
 
-    def test_update_overwrites(self):
-        interp, _ = run('x = {"a": 1}\nx.update({"a": 99})')
+    def test_milap_overwrites(self):
+        interp, _ = run('x = {"a": 1}\nx.milap({"a": 99})')
         assert extract_value(interp.variables["x"]["value"]) == {"a": 99}
 
 

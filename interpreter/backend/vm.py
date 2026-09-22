@@ -21,7 +21,7 @@ from dataclasses import dataclass
 from ..errors import (
     ERROR_MAP,
     HalndeVaktGhalti,
-    IndexJeGhalti,
+    JagaJeGhalti,
     MatalabJeGhalti,
     NaleJeGhalti,
     QisamJeGhalti,
@@ -522,7 +522,7 @@ class VM:
         if isinstance(e, TypeError):
             raise QisamJeGhalti(str(e), line, column, self.code_string)
         if isinstance(e, IndexError):
-            raise IndexJeGhalti(str(e), line, column, self.code_string)
+            raise JagaJeGhalti(str(e), line, column, self.code_string)
         if isinstance(e, ZeroDivisionError):
             raise ZeroVindJeGhalti(str(e), line, column, self.code_string)
         raise HalndeVaktGhalti(str(e), line, column, self.code_string)

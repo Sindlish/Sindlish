@@ -29,10 +29,10 @@ Now each promise in detail.
 
 ## Promise 1 · Nothing crashes quietly
 
-Every failure path ends in a `SindhiBaseError` with **file position and source text attached** — rendered as the caret display you've seen throughout this book. Python exceptions leaking to users are treated as interpreter bugs: `call_method` (`objects/base.py:249`) maps `TypeError → QisamJeGhalti`, `IndexError → IndexJeGhalti`, `ZeroDivisionError → ZeroVindJeGhalti`, everything else → `HalndeVaktGhalti`. Verified example of the worst ordinary accident — an out-of-bounds index:
+Every failure path ends in a `SindhiBaseError` with **file position and source text attached** — rendered as the caret display you've seen throughout this book. Python exceptions leaking to users are treated as interpreter bugs: `call_method` (`objects/base.py:249`) maps `TypeError → QisamJeGhalti`, `IndexError → JagaJeGhalti`, `ZeroDivisionError → ZeroVindJeGhalti`, everything else → `HalndeVaktGhalti`. Verified example of the worst ordinary accident — an out-of-bounds index:
 
 ```text
-IndexJeGhalti: Fehrist jo index 10 hadd khaan bahar aahe.
+JagaJeGhalti: Fehrist jo index 10 hadd khaan bahar aahe.
 Call Stack (most recent call last):
   --> Line 2, in main
     likh(l[10])

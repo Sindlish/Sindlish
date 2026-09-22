@@ -3,15 +3,15 @@
 from tests.conftest import extract_value, run
 
 
-class TestAddkar:
+class TestShamil:
     """add"""
 
-    def test_addkar(self):
-        interp, _ = run("x = {1, 2}\nx.addkar(3)")
+    def test_shamil(self):
+        interp, _ = run("x = {1, 2}\nx.shamil(3)")
         assert 3 in extract_value(interp.variables["x"]["value"])
 
-    def test_addkar_duplicate(self):
-        interp, _ = run("x = {1, 2}\nx.addkar(2)")
+    def test_shamil_duplicate(self):
+        interp, _ = run("x = {1, 2}\nx.shamil(2)")
         assert extract_value(interp.variables["x"]["value"]) == {1, 2}
 
 
@@ -59,11 +59,11 @@ class TestFarq:
         assert extract_value(interp.variables["val"]["value"]) == {1}
 
 
-class TestSymmetricFarq:
+class TestBahamifarq:
     """symmetric_difference"""
 
-    def test_symmetric_farq(self):
-        interp, _ = run("a = {1, 2, 3}\nb = {2, 3, 4}\nval = a.symmetric_farq(b)")
+    def test_bahamifarq(self):
+        interp, _ = run("a = {1, 2, 3}\nb = {2, 3, 4}\nval = a.bahamifarq(b)")
         assert extract_value(interp.variables["val"]["value"]) == {1, 4}
 
 
@@ -111,11 +111,11 @@ class TestSetKadh:
         assert len(extract_value(interp.variables["x"]["value"])) == 2
 
 
-class TestSetUpdate:
+class TestSetMilap:
     """update"""
 
-    def test_update(self):
-        interp, _ = run("x = {1, 2}\nx.update({3, 4})")
+    def test_milap(self):
+        interp, _ = run("x = {1, 2}\nx.milap({3, 4})")
         assert extract_value(interp.variables["x"]["value"]) == {1, 2, 3, 4}
 
 

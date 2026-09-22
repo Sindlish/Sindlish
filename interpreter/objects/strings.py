@@ -1,4 +1,4 @@
-from ..errors import IndexJeGhalti, QisamJeGhalti
+from ..errors import JagaJeGhalti, QisamJeGhalti
 from ..frontend.tokens import TokenType
 from .base import SdShey, SdType
 from .numbers import SdBool, SdNumber
@@ -81,7 +81,7 @@ class SdString(SdShey):
         try:
             return SdString(self.value[int(index.value)])
         except IndexError:
-            raise IndexJeGhalti(
+            raise JagaJeGhalti(
                 f"Lafz jo index {int(index.value)} hadd khaan bahar aahe."
             )
 

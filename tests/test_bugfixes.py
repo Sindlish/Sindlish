@@ -5,7 +5,7 @@ import pytest
 from interpreter.analysis.resolver import Resolver
 from interpreter.errors import (
     HalndeVaktGhalti,
-    IndexJeGhalti,
+    JagaJeGhalti,
     LikhaiJeGhalti,
     MatalabJeGhalti,
     NaleJeGhalti,
@@ -574,7 +574,7 @@ class TestLazysilsilo:
         assert "big" in out
 
     def test_out_of_bounds_index_raises(self):
-        with pytest.raises(IndexJeGhalti, match="bahar"):
+        with pytest.raises(JagaJeGhalti, match="bahar"):
             run("r = silsilo(3)\nr[7]")
 
 

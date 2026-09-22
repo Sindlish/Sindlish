@@ -38,11 +38,11 @@ Division/modulo returning Results instead of raising is the flagship design deci
 
 Registered once at import time, bottom half of `collections.py`. Signature for each entry: plain function `(obj, args) → SdShey`.
 
-**fehrist** — `wadha` append · `wadhayo` extend · `wajh` insert · `hata` remove · `kadh` pop · `saf` clear · `index` · `garn` count · `tarteeb` sort · `ulto` reverse · `nakal` copy
+**fehrist** — `wadha` append · `wadhayo` extend · `wajh` insert · `hata` remove · `kadh` pop · `saf` clear · `jaga` · `garn` count · `tarteeb` sort · `ulto` reverse · `nakal` copy
 
-**lughat** — `hasil(key, dflt)` get · `syon` items · `cabeyon` keys · `raqamon` values · `syonkadh` popitem · `defaultrakh` setdefault · `update` · `kadh` pop · `saf` · `nakal`
+**lughat** — `hasil(key, dflt)` get · `syon` items · `cabeyon` keys · `raqamon` values · `syonkadh` popitem · `defaultrakh` setdefault · `milap` · `kadh` pop · `saf` · `nakal`
 
-**majmuo** — `addkar` add · `chad` discard · `hata` remove(strict) · `kadh` pop · `bade` union · `mushtarak` intersection · `farq` difference · `symmetric_farq` · `nandohisoahe` ⊆ · `wadohisoahe` ⊇ · `alaghahe` disjoint · `saf` · `nakal` · `update`
+**majmuo** — `shamil` add · `chad` discard · `hata` remove(strict) · `kadh` pop · `bade` union · `mushtarak` intersection · `farq` difference · `bahamifarq` · `nandohisoahe` ⊆ · `wadohisoahe` ⊇ · `alaghahe` disjoint · `saf` · `nakal` · `milap`
 
 > 📝 Naming footnote: SLA dictionaries list both `bade` (ٻڌي) and `milap` (ميلاپ) as words for *union*, so mapping `milap → intersection` contradicted the source. **Decided in #32:** union keeps `bade`; intersection was renamed to `mushtarak` (مشترک, "shared/common") — matching the SLA's view of *milap* as a union word.
 

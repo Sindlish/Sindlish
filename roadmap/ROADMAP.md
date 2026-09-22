@@ -43,7 +43,7 @@
 
 | Milestone | Theme | Scope | Home |
 |---|---|---|---|
-| **v0.2.0 — Expressive Core** | the syntax feels right | `jori` tuples, `bhet`/`haal` pattern matching, block expressions, chaining comparisons, ternary, f-strings, comprehensions, lambdas, do-while, `==`/`aa`, compound assignment, slicing, unpacking, 38 string methods, `chunta`/`tabdeel`/`jama` + utility builtins, `likh(sep=, end=)` | [milestone/2](https://github.com/Sindlish/Sindlish/milestone/2) · [spec](spec-v0.2.0.md) |
+| **v0.2.0 — Expressive Core** | the syntax feels right | `jori` tuples, `bhet`/`haal` pattern matching, block expressions, chaining comparisons, ternary, f-strings, comprehensions, lambdas, do-while, `==`/`aa`, compound assignment, slicing, unpacking, 38 string methods, `chunta`/`tabdeel`/`jama` + utility builtins, `likh(vich=, akhir=)` | [milestone/2](https://github.com/Sindlish/Sindlish/milestone/2) · [spec](spec-v0.2.0.md) |
 | **v0.3.0 — Data & Serialization** | it reads the real world | file objects + `sang`, bytes type, date/time builtins; JSON, regex, CSV modules | [milestone/3](https://github.com/Sindlish/Sindlish/milestone/3) |
 | **v0.4.0 — Object System** | it models real things | `jamaat` classes, `__bunyaad__`, `haso`, `nasal` inheritance, `walid`, `gun` properties, Sindhi dunders, `abstrak` | [milestone/4](https://github.com/Sindlish/Sindlish/milestone/4) |
 | **v0.5.0 — Modules & Standard Library** | it scales to real projects | `shamil` import system, package search paths, first stdlib modules | [milestone/7](https://github.com/Sindlish/Sindlish/milestone/7) |
@@ -92,7 +92,7 @@ exploratory prototypes carry `experiment` and are **not** committed to any miles
 | String methods | 38, all Sindhi-named; `warha()`→fehrist, `gadh()` accepts fehrist or jori |
 | Functional builtins | `chunta(cond_fn, list)`, `tabdeel(fn, list)`, `jama(fn, list)` — function-first |
 | Utility builtins | `zbaar` (enumerate), `jora` (zip), `badlo` (cast), `ashl` (truthiness), `lambai` (len alias) |
-| `likh` kwargs | `likh("a", "b", sep=", ", end="!\n")` |
+| `likh` kwargs | `likh("a", "b", vich=", ", akhir="!\n")` |
 | Break / continue | `tor` = break, `jari` = continue (unchanged; `bhet` is the match keyword) |
 
 ### v0.3.0 — Data & Serialization
