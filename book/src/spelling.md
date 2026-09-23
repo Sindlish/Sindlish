@@ -6,7 +6,7 @@ Every public Sindlish name passes through one letter map before it ships. This c
 
 ## The letter map
 
-Each Sindhi letter has exactly one lowercase mapping:
+The table gives each Sindhi letter's **base** Sindlish mapping. Context-dependent vowel realizations (`و`→`u`/`o`, `ي/ئ`→`i`/`e`) are defined separately by the rendering rules below, not here:
 
 | Sindhi | Sindlish | Sindhi | Sindlish | Sindhi | Sindlish |
 |--------|----------|--------|----------|--------|----------|
@@ -22,19 +22,19 @@ Each Sindhi letter has exactly one lowercase mapping:
 | ٺ      | tth      | خ      | kh       | م      | m         |
 | ج      | j        | د      | d        | ن      | n         |
 | ڄ      | jj       | ڌ      | dh       | ڻ      | nn        |
-| جھ     | jh       | ڏ / ڊ  | dd       | و      | w / u / o |
-| ڃ      | ny       | ڍ      | ddh      | ي / ئ | y / i / e |
+| جھ     | jh       | ڏ / ڊ  | dd       | و      | w         |
+| ڃ      | ny       | ڍ      | ddh      | ي / ئ | y         |
 | چ      | ch       |        |          | ء      | (carrier) |
 | ڇ      | chh      |        |          |        |           |
 
-**Collapsed pairs** (distinct letters, one pronunciation, one spelling): `ا/آ`→`a`, `س/ث/ص`→`s`, `ض/ظ/ز/ذ`→`z`, `ت/ط`→`t`, `ح/ه/ھ`→`h`, `ڪ/ک`→`k`, `ڏ/ڊ`→`dd`, `ي/ئ`→`y`. No apostrophe is ever a valid identifier character.
+**Collapsed pairs** (distinct letters, one pronunciation, one spelling): `ا/آ`→`a`, `س/ث/ص`→`s`, `ض/ظ/ز/ذ`→`z`, `ت/ط`→`t`, `ح/ه/ھ`→`h`, `ڪ/ک`→`k`, `ڏ/ڊ`→`dd`, `ي/ئ`→`y` as their base consonant mapping. No apostrophe is ever a valid identifier character.
 
 ## Rendering rules
 
 - **Implicit vowels.** Sindhi writes short vowels diacritically; romanization supplies them from the natural pronunciation: `a`, `i`, `e`, `o`, `u`. Long/short length is **not** marked (`jari`, `wapas`, not `jaari`).
 - **ي / و as vowels.** Terminal و reads as `o`/`u` (`majmuo`, `silsilo`); جي reads as `ji` (`jistain`, `bahari`). Root consonant ي is `y` (`ya`).
 - **ع / ء carriers.** Word-initial they render the carried vowel and vanish (`adad`); medial they drop entirely (`majmuo`, `aalmi`).
-- **Consonants strict, vowels lenient.** A name is re-spelled only when its *consonants* violate the map; vowel letters are never audited.
+- **Consonants strict, vowels lenient.** A name is re-spelled only when its *consonants* violate the map; vowel letters are never audited. The **replacement rows below are declared lexical exceptions**: their `Script` values are full words, not letter-by-letter inputs to the map, so `jaga` (جڳهه — root consonants `j-gg-h`, *not* `j-g`) and `JagaJeGhalti` are not re-audited consonant by consonant.
 
 ## English-origin replacements (SEP 80)
 
