@@ -158,11 +158,11 @@ class ZeroVindJeGhalti(SindhiBaseError):
         )
 
 
-class IndexJeGhalti(SindhiBaseError):
+class JagaJeGhalti(SindhiBaseError):
     def __init__(
         self, details, line=None, column=None, code_string=None, traceback=None
     ):
-        super().__init__("IndexJeGhalti", details, line, column, code_string, traceback)
+        super().__init__("JagaJeGhalti", details, line, column, code_string, traceback)
 
 
 class TarteebJeGhalti(SindhiBaseError):
@@ -194,7 +194,7 @@ ERROR_MAP = {
     "QisamJeGhalti": QisamJeGhalti,
     "HalndeVaktGhalti": HalndeVaktGhalti,
     "ZeroVindJeGhalti": ZeroVindJeGhalti,
-    "IndexJeGhalti": IndexJeGhalti,
+    "JagaJeGhalti": JagaJeGhalti,
     "TarteebJeGhalti": TarteebJeGhalti,
     "MatalabJeGhalti": MatalabJeGhalti,
 }

@@ -40,7 +40,7 @@ classDiagram
     class QisamJeGhalti
     class HalndeVaktGhalti
     class ZeroVindJeGhalti
-    class IndexJeGhalti
+    class JagaJeGhalti
     class TarteebJeGhalti
     class MatalabJeGhalti
     Exception~Python~ <|-- SindhiBaseError
@@ -49,7 +49,7 @@ classDiagram
     SindhiBaseError <|-- QisamJeGhalti : wrong type
     SindhiBaseError <|-- HalndeVaktGhalti : const/panic/general
     SindhiBaseError <|-- ZeroVindJeGhalti : divide by zero
-    SindhiBaseError <|-- IndexJeGhalti : out of bounds
+    SindhiBaseError <|-- JagaJeGhalti : out of bounds
     SindhiBaseError <|-- TarteebJeGhalti : program structure
     SindhiBaseError <|-- MatalabJeGhalti : argument-count
 ```
@@ -113,7 +113,7 @@ Python exceptions crossing into user programs would leak internals, so `SdShey.c
 | Python raises | User sees |
 |---|---|
 | `TypeError` | `QisamJeGhalti` |
-| `IndexError` | `IndexJeGhalti` |
+| `IndexError` | `JagaJeGhalti` |
 | `ZeroDivisionError` | `ZeroVindJeGhalti` |
 | already-`SindhiBaseError` | passed through untouched (position preserved) |
 | anything else | generic `HalndeVaktGhalti` |

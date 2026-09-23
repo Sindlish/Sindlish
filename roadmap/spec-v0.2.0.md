@@ -26,7 +26,7 @@
 | 14 | String methods | 38 methods | #55, #75, #76 | P2 |
 | 15 | Functional builtins | `chunta` `tabdeel` `jama` | #56 | P1 |
 | 16 | Utility builtins | `zbaar` `jora` `badlo` `ashl` `lambai` | #77 | P1 |
-| 17 | `likh` kwargs | `likh(sep=, end=)` | #78 | P1 |
+| 17 | `likh` kwargs | `likh(vich=, akhir=)` | #78, #80 | P1 |
 
 ---
 
@@ -182,7 +182,7 @@ a, b = "xy"                    # works on any iterable (str, jori, …)
 ```
 
 - LHS is comma-separated targets (variables/subscripts) with optional `*` capture (single allowed).
-- RHS must be iterable; length mismatch → runtime `IndexJeGhalti` (unless `*` captures the remainder).
+- RHS must be iterable; length mismatch → runtime `JagaJeGhalti` (unless `*` captures the remainder).
 - Multiple assignment `a, b = 1, 2` uses the same machinery.
 - **Both sides evaluated before any store**; evaluation order is defined (all RHS, then each store left-to-right).
 
@@ -268,10 +268,10 @@ lambai(value)        # length (alias for lambi)
 ## 17. `likh` keyword args
 
 ```
-likh("a", "b", sep=", ", end="!\n")
+likh("a", "b", vich=", ", akhir="!\n")
 ```
 
-- `sep` default `" "`; `end` default `"\n"`.
+- `vich` default `" "`; `akhir` default `"\n"`.
 - `chunta`/`tabdeel`/`jama`/`zbaar`/`jora`/`badlo`/`ashl`/`lambai` are **builtins** (global), not methods.
 
 ---

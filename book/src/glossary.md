@@ -66,7 +66,7 @@ Every error class is a tiny Sindhi sentence ending in **Ghalti** (*mistake*):
 | `QisamJeGhalti` | *type-mistake* | wrong kind of value |
 | `HalndeVaktGhalti` | *right-now-mistake* | runtime violations, `pakko` reassignment, panic |
 | `ZeroVindJeGhalti` | *zero-point-mistake* | divide/mod by zero |
-| `IndexJeGhalti` | *index-mistake* | out-of-bounds access |
+| `JagaJeGhalti` | *place-mistake* | out-of-bounds access |
 | `TarteebJeGhalti` | *structure-mistake* | declarations out of program position; top-level `wapas`; `bahari`/closure writes without declaration |
 | `MatalabJeGhalti` | *meaning-mistake* | wrong argument count; unknown or duplicate keyword names |
 
@@ -95,7 +95,7 @@ The Python side prefixes everything with **Sd**:
 | `chunta(fn, list)` | *choose* | filter — keep items where `fn` is true |
 | `tabdeel(fn, list)` | *transform* | map — `fn` over each item |
 | `jama(fn, list)` | *gather* | reduce — fold left, no seed argument |
-| `zbaar(list)` | *instead / in place* | enumerate — `fehrist` of `[index, value]` pairs |
+| `zbaar(list)` | *instead / in place* | enumerate — `fehrist` of `[jaga, value]` pairs |
 | `jora(a, b, …)` | *pair up* | zip — `fehrist` of pairs, shortest wins |
 | `badlo(value, qisam)` | *change* | cast between types |
 | `ashl(value)` | *truth* | truthiness (`0`, `khali`, `[]` → `koorh`) |

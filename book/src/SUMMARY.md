@@ -5,6 +5,7 @@
 - [Welcome to the Workshop](welcome.md)
 - [How to Read This Book](how-to-read.md)
 - [The Sindhi Dictionary](glossary.md)
+- [The Spelling Standard](spelling.md)
 
 # Part One — The Big Picture 🗺️
 

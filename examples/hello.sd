@@ -561,8 +561,8 @@ likh("2. wadhayo([50, 60]) - extend:", f)
 f.wajh(1, 20)
 likh("3. wajh(1, 20) - insert at index 1:", f)
 
-# index - find position
-likh("4. index(30) - find index of 30:", f.index(30))
+# jaga - find position
+likh("4. jaga(30) - find index of 30:", f.jaga(30))
 
 # garn - count occurrences
 f.wadha(20)
@@ -603,9 +603,9 @@ likh("--- PART 18: DICTIONARY METHODS ---")
 l = {"naam": "Sindlish", "ver": 1}
 likh("Starting dict:", l)
 
-# update - merge
-l.update({"saal": 2024, "type": "programming"})
-likh("1. update({...}) - merge:", l)
+# milap - merge
+l.milap({"saal": 2024, "type": "programming"})
+likh("1. milap({...}) - merge:", l)
 
 # hasil - get value
 likh("2. hasil('naam') - get value:", l.hasil("naam"))
@@ -654,13 +654,13 @@ s2 = {3, 4, 5}
 likh("s1:", s1)
 likh("s2:", s2)
 
-# addkar - add single element
-s1.addkar(6)
-likh("1. addkar(6) - add element:", s1)
+# shamil - add single element
+s1.shamil(6)
+likh("1. shamil(6) - add element:", s1)
 
-# update - add multiple
-s1.update({7, 8})
-likh("2. update({7,8}) - add multiple:", s1)
+# milap - add multiple
+s1.milap({7, 8})
+likh("2. milap({7,8}) - add multiple:", s1)
 
 # hata - remove element
 s1.hata(1)
@@ -679,8 +679,8 @@ likh("6. mushtarak(s2) - intersection:", s1.mushtarak(s2))
 # farq - difference
 likh("7. farq(s2) - difference:", s1.farq(s2))
 
-# symmetric_farq - symmetric difference
-likh("8. symmetric_farq(s2) - symmetric diff:", s1.symmetric_farq(s2))
+# bahamifarq - symmetric difference
+likh("8. bahamifarq(s2) - symmetric diff:", s1.bahamifarq(s2))
 
 # nandohisoahe - issubset
 likh("9. nandohisoahe({1,2}) - is subset:", s1.nandohisoahe({1, 2}))

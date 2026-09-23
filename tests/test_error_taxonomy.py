@@ -2,7 +2,7 @@
 
 Documents the decisions from the error-philosophy audit:
 
-- ``IndexJeGhalti`` is alive: positional out-of-bounds (list/string/range)
+- ``JagaJeGhalti`` is alive: positional out-of-bounds (list/string/range)
   and Python ``IndexError`` laundering land here; a missing dict key stays
   ``QisamJeGhalti`` (a lookup miss, not an index).
 - "Method not found" is one class: ``NaleJeGhalti`` everywhere.
@@ -17,7 +17,7 @@ Documents the decisions from the error-philosophy audit:
 import pytest
 
 from interpreter.errors import (
-    IndexJeGhalti,
+    JagaJeGhalti,
     MatalabJeGhalti,
     NaleJeGhalti,
     QisamJeGhalti,
@@ -26,7 +26,7 @@ from interpreter.errors import (
 from tests.conftest import run
 
 
-class TestIndexJeGhaltiIsAlive:
+class TestJagaJeGhaltiIsAlive:
     """Positional out-of-bounds is its own class, not a type error."""
 
     @pytest.mark.parametrize(
@@ -41,11 +41,11 @@ class TestIndexJeGhaltiIsAlive:
         ],
     )
     def test_positional_oob_is_index_error(self, code):
-        with pytest.raises(IndexJeGhalti, match="hadd khaan bahar"):
+        with pytest.raises(JagaJeGhalti, match="hadd khaan bahar"):
             run(code)
 
     def test_pop_out_of_range_is_index_error(self):
-        with pytest.raises(IndexJeGhalti):
+        with pytest.raises(JagaJeGhalti):
             run("x = [1, 2]\nx.kadh(9)")
 
     def test_non_numeric_index_stays_type_error(self):

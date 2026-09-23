@@ -85,11 +85,11 @@ class TestGarn:
         assert extract_value(interp.variables["val"]["value"]) == 0
 
 
-class TestIndex:
-    """index"""
+class TestJaga:
+    """jaga"""
 
-    def test_index_finds(self):
-        interp, _ = run("x = [10, 20, 30]\nval = x.index(20)")
+    def test_jaga_finds(self):
+        interp, _ = run("x = [10, 20, 30]\nval = x.jaga(20)")
         assert extract_value(interp.variables["val"]["value"]) == 1
 
 

@@ -1,4 +1,4 @@
-from ..errors import IndexJeGhalti, QisamJeGhalti
+from ..errors import JagaJeGhalti, QisamJeGhalti
 from ..frontend.tokens import TokenType
 from .base import SdShey, SdType
 from .core import SdNull, SdResult
@@ -80,7 +80,7 @@ class SdList(SdShey):
         try:
             return self.elements[int(index.value)]
         except IndexError:
-            raise IndexJeGhalti(
+            raise JagaJeGhalti(
                 f"Fehrist jo index {int(index.value)} hadd khaan bahar aahe."
             )
 
@@ -92,7 +92,7 @@ class SdList(SdShey):
             self.elements[int(index.value)] = value
             return SdNull()
         except IndexError:
-            raise IndexJeGhalti(
+            raise JagaJeGhalti(
                 f"Fehrist jo index {int(index.value)} hadd khaan bahar aahe."
             )
 
@@ -137,7 +137,7 @@ class SdList(SdShey):
             try:
                 return self.elements.pop(idx)
             except IndexError:
-                raise IndexJeGhalti(f"Fehrist jo index {idx} hadd khaan bahar aahe.")
+                raise JagaJeGhalti(f"Fehrist jo index {idx} hadd khaan bahar aahe.")
         else:
             if len(self.elements) == 0:
                 raise QisamJeGhalti("Khaali Fehrist maan natho kadhi (pop) saghjay.")
@@ -147,7 +147,7 @@ class SdList(SdShey):
         self.elements.clear()
         return SdNull()
 
-    def index(self, item):
+    def jaga(self, item):
         try:
             return SdNumber(self.elements.index(item))
         except ValueError:
@@ -186,7 +186,7 @@ class SdRange(SdShey):
         if idx < 0:
             idx += length
         if not 0 <= idx < length:
-            raise IndexJeGhalti(
+            raise JagaJeGhalti(
                 f"Silsilo jo index {int(index.value)} hadd khaan bahar aahe."
             )
         return SdNumber(self.start + idx * self.step)
@@ -272,9 +272,9 @@ class SdDict(SdShey):
         else:
             raise QisamJeGhalti(f"Key '{key!s}' Lughat mein na mili.")
 
-    def update(self, other):
+    def milap(self, other):
         if not isinstance(other, SdDict):
-            raise QisamJeGhalti("Sirf biye Lughat saan update kare saghjay tho.")
+            raise QisamJeGhalti("Sirf biye Lughat saan milap kare saghjay tho.")
         self.pairs.update(other.pairs)
         return SdNull()
 
@@ -462,7 +462,7 @@ def fehrist_saf(obj, args):
     return obj
 
 
-def fehrist_index(obj, args):
+def fehrist_jaga(obj, args):
     target = args[0]
     for i, item in enumerate(obj.elements):
         eq_result = item.call_method("__eq__", [target])
@@ -507,7 +507,7 @@ FEHRIST_TYPE.register_method("wajh", fehrist_wajh)
 FEHRIST_TYPE.register_method("hata", fehrist_hata)
 FEHRIST_TYPE.register_method("kadh", fehrist_kadh)
 FEHRIST_TYPE.register_method("saf", fehrist_saf)
-FEHRIST_TYPE.register_method("index", fehrist_index)
+FEHRIST_TYPE.register_method("jaga", fehrist_jaga)
 FEHRIST_TYPE.register_method("garn", fehrist_garn)
 FEHRIST_TYPE.register_method("tarteeb", fehrist_tarteeb)
 FEHRIST_TYPE.register_method("ulto", fehrist_ulto)
@@ -546,9 +546,9 @@ def lughat_defaultrakh(obj, args):
     return obj.pairs.setdefault(key, default)
 
 
-def lughat_update(obj, args):
+def lughat_milap(obj, args):
     if not isinstance(args[0], SdDict):
-        raise QisamJeGhalti("Update sirf Lughat je saath hi kare saghjay tho.")
+        raise QisamJeGhalti("Milap sirf Lughat je saath hi kare saghjay tho.")
     obj.pairs.update(args[0].pairs)
     return obj
 
@@ -575,14 +575,14 @@ LUGHAT_TYPE.register_method("cabeyon", lughat_cabeyon)
 LUGHAT_TYPE.register_method("raqamon", lughat_raqamon)
 LUGHAT_TYPE.register_method("syonkadh", lughat_syonkadh)
 LUGHAT_TYPE.register_method("defaultrakh", lughat_defaultrakh)
-LUGHAT_TYPE.register_method("update", lughat_update)
+LUGHAT_TYPE.register_method("milap", lughat_milap)
 LUGHAT_TYPE.register_method("kadh", lughat_kadh)
 LUGHAT_TYPE.register_method("saf", lughat_saf)
 LUGHAT_TYPE.register_method("nakal", lughat_nakal)
 
 
 # Majmuo (Set) Methods
-def majmuo_addkar(obj, args):
+def majmuo_shamil(obj, args):
     item = args[0]
     if isinstance(item, (SdList, SdDict, SdSet)):
         raise QisamJeGhalti(
@@ -615,9 +615,9 @@ def majmuo_farq(obj, args):
     return SdSet(obj.elements.difference(args[0].elements))
 
 
-def majmuo_symmetric_farq(obj, args):
+def majmuo_bahamifarq(obj, args):
     if not isinstance(args[0], SdSet):
-        raise QisamJeGhalti("Symmetric farq sirf Majmuo laai aahe.")
+        raise QisamJeGhalti("Bahamifarq sirf Majmuo laai aahe.")
     return SdSet(obj.elements.symmetric_difference(args[0].elements))
 
 
@@ -664,10 +664,10 @@ def majmuo_nakal(obj, args):
     return SdSet(obj.elements.copy())
 
 
-def majmuo_update(obj, args):
+def majmuo_milap(obj, args):
     if not isinstance(args[0], SdSet):
         raise QisamJeGhalti(
-            "Update laai banhay objects jo qisam same hujjhan lazmi aahe."
+            "Milap laai banhay objects jo qisam same hujjhan lazmi aahe."
         )
     for el in args[0].elements:
         if isinstance(el, (SdList, SdDict, SdSet)):
@@ -678,12 +678,12 @@ def majmuo_update(obj, args):
     return obj
 
 
-MAJMUO_TYPE.register_method("addkar", majmuo_addkar)
+MAJMUO_TYPE.register_method("shamil", majmuo_shamil)
 MAJMUO_TYPE.register_method("chad", majmuo_chad)
 MAJMUO_TYPE.register_method("bade", majmuo_bade)
 MAJMUO_TYPE.register_method("mushtarak", majmuo_mushtarak)
 MAJMUO_TYPE.register_method("farq", majmuo_farq)
-MAJMUO_TYPE.register_method("symmetric_farq", majmuo_symmetric_farq)
+MAJMUO_TYPE.register_method("bahamifarq", majmuo_bahamifarq)
 MAJMUO_TYPE.register_method("nandohisoahe", majmuo_nandohisoahe)
 MAJMUO_TYPE.register_method("wadohisoahe", majmuo_wadohisoahe)
 MAJMUO_TYPE.register_method("alaghahe", majmuo_alaghahe)
@@ -691,4 +691,4 @@ MAJMUO_TYPE.register_method("hata", majmuo_hata)
 MAJMUO_TYPE.register_method("kadh", majmuo_kadh)
 MAJMUO_TYPE.register_method("saf", majmuo_saf)
 MAJMUO_TYPE.register_method("nakal", majmuo_nakal)
-MAJMUO_TYPE.register_method("update", majmuo_update)
+MAJMUO_TYPE.register_method("milap", majmuo_milap)

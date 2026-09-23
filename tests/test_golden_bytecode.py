@@ -316,7 +316,7 @@ PROGRAMS = [
     ),
     (
         "builtin_kwarg_call",
-        'likh("a", "b", sep="-")',
+        'likh("a", "b", vich="-")',
         (
             ("LOAD_CONST", 0),
             ("LOAD_CONST", 1),

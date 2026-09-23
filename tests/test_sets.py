@@ -22,7 +22,7 @@ class TestSetLiteral:
     def test_explicit_majmuo(self):
         code = """
         m = majmuo()
-        m.addkar(1)
+        m.shamil(1)
         likh(m)
         """
         _vm, interp = run(code)
