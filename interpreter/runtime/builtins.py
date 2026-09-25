@@ -33,9 +33,9 @@ class SimpleBuiltins:
     # Registered-name -> {keyword argument: default value}. The VM validates
     # every keyword against this spec, fills defaults, then hands the bound
     # kwargs dict to the builtin. Builtins absent from this mapping reject
-    # all keyword arguments. A spec whose defaults are KWARG_UNSET declares
-    # names the builtin must distinguish "caller passed it" from "filled in
-    # for the caller" — it recovers the passed ones by identity.
+    # all keyword arguments. A default of KWARG_UNSET is the way a spec says
+    # "this name matters but has no default": the builtin reads it back to
+    # tell a name the caller passed from one filled in on the caller's behalf.
     kwarg_specs: ClassVar[dict] = {
         "likh": {"vich": SdString(" "), "akhir": SdString("\n")},
         "silsilo": dict.fromkeys(SILSILO_SLOTS, KWARG_UNSET),
@@ -51,6 +51,17 @@ class SimpleBuiltins:
         for key, default in spec.items():
             kwargs.setdefault(key, default)
         return kwargs
+
+    @staticmethod
+    def passed_kwargs(kwargs: dict) -> dict:
+        """Return only the declared keyword arguments the caller actually passed.
+
+        ``resolve_kwargs`` fills every declared default before the builtin
+        runs, so a builtin whose spec declares ``KWARG_UNSET`` needs this to
+        recover the caller's own names by identity — a value comparison would
+        lose a name passed as ``0`` or ``1`` when that is also its default.
+        """
+        return {key: value for key, value in kwargs.items() if value is not KWARG_UNSET}
 
     @register(functions)
     def majmuo(self, args, kwargs=None):
@@ -109,11 +120,7 @@ class SimpleBuiltins:
     @register(functions)
     def silsilo(self, args, kwargs=None):
         """Return a lazy range from shuru (inclusive) to akhir (exclusive) stepping by qadam."""
-        supplied = (
-            {}
-            if kwargs is None
-            else {name: value for name, value in kwargs.items() if value is not KWARG_UNSET}
-        )
+        supplied = self.passed_kwargs(kwargs) if kwargs else {}
 
         if not supplied:
             values = [self.silsilo_adad(f"{i + 1}jo", arg) for i, arg in enumerate(args)]

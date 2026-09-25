@@ -3,7 +3,7 @@
 import pytest
 
 from interpreter.errors import HalndeVaktGhalti, MatalabJeGhalti, QisamJeGhalti
-from tests.conftest import extract_value, run
+from tests.conftest import extract_value, get_variable_value, run
 
 
 class TestLambi:
@@ -95,10 +95,10 @@ class TestLikhKwargs:
 def silsilo_value(expr):
     """Run a silsilo expression and hand back the SdRange it produced."""
     vm, _ = run(f"r = {expr}")
-    return vm.globals.records["r"].value
+    return get_variable_value(vm, "r")
 
 
-def snapshot(sd_range):
+def range_shape(sd_range):
     """Reduce a SdRange to the shape the SEP compares: bounds, len, iteration."""
     return (
         sd_range.start,
@@ -124,7 +124,7 @@ class TestSilsiloKwargs:
         ],
     )
     def test_keyword_form_equals_positional_twin(self, kwarg_call, positional_twin):
-        assert snapshot(silsilo_value(kwarg_call)) == snapshot(
+        assert range_shape(silsilo_value(kwarg_call)) == range_shape(
             silsilo_value(positional_twin)
         )
 
@@ -136,44 +136,33 @@ class TestSilsiloKwargs:
         ],
     )
     def test_mixed_positional_and_keyword(self, mixed_call, positional_twin):
-        assert snapshot(silsilo_value(mixed_call)) == snapshot(
+        assert range_shape(silsilo_value(mixed_call)) == range_shape(
             silsilo_value(positional_twin)
         )
 
     def test_kwargs_dict_splat(self):
         code = 'k = {"shuru": 1, "akhir": 10, "qadam": 2}\nr = silsilo(**k)'
         vm, _ = run(code)
-        assert snapshot(vm.globals.records["r"].value) == snapshot(
+        assert range_shape(get_variable_value(vm, "r")) == range_shape(
             silsilo_value("silsilo(1, 10, 2)")
         )
 
     def test_keyword_names_are_independent_of_order(self):
-        assert snapshot(silsilo_value("silsilo(shuru=1, qadam=2, akhir=10)")) == snapshot(
+        assert range_shape(silsilo_value("silsilo(shuru=1, qadam=2, akhir=10)")) == range_shape(
             silsilo_value("silsilo(1, 10, 2)")
         )
 
-    def test_explicit_zero_is_not_mistaken_for_an_unset_keyword(self):
-        # shuru=0 equals the default, so a value comparison would lose it
-        assert snapshot(silsilo_value("silsilo(shuru=0, akhir=5)")) == snapshot(
-            silsilo_value("silsilo(0, 5)")
-        )
-
-    def test_explicit_default_step_is_not_mistaken_for_an_unset_keyword(self):
-        assert snapshot(silsilo_value("silsilo(1, 5, qadam=1)")) == snapshot(
-            silsilo_value("silsilo(1, 5)")
-        )
-        with pytest.raises(MatalabJeGhalti, match=r"(?i)dobara"):
-            run("silsilo(1, 2, 3, qadam=1)")
-
     def test_star_args_splat_reaches_the_positional_path(self):
-        assert snapshot(silsilo_value("silsilo(*[1, 2])")) == snapshot(
+        assert range_shape(silsilo_value("silsilo(*[1, 2])")) == range_shape(
             silsilo_value("silsilo(1, 2)")
         )
 
     def test_empty_kwargs_dict_splat_is_no_keywords(self):
-        assert snapshot(silsilo_value("silsilo(1, 2, **{})")) == snapshot(
+        assert range_shape(silsilo_value("silsilo(1, 2, **{})")) == range_shape(
             silsilo_value("silsilo(1, 2)")
         )
+
+    def test_empty_kwargs_dict_splat_does_not_satisfy_the_arity_rule(self):
         with pytest.raises(MatalabJeGhalti, match=r"1, 2, ya 3"):
             run("silsilo(**{})")
 
@@ -185,10 +174,18 @@ class TestSilsiloKwargs:
         _, out = run("likh(silsilo(shuru=1, akhir=5, qadam=2))")
         assert "silsilo(1, 5, 2)" in out
 
-    @pytest.mark.parametrize("name", ["bogus", "start", "stop", "step"])
+    @pytest.mark.parametrize("name", ["bogus", "start", "stop", "step", "ant"])
     def test_unknown_kwarg_raises(self, name):
         with pytest.raises(MatalabJeGhalti, match="Achanak keyword"):
             run(f"silsilo(1, 5, {name}=1)")
+
+    def test_sep_repeat_argument_example_reports_the_renamed_keyword(self):
+        # SEP 81's example is silsilo(1, 2, stop=3); #80 rejected `stop`, so it
+        # now lands as an unknown keyword, and the repeat case is `akhir`
+        with pytest.raises(MatalabJeGhalti, match="Achanak keyword"):
+            run("silsilo(1, 2, stop=3)")
+        with pytest.raises(MatalabJeGhalti, match=r"(?i)dobara"):
+            run("silsilo(1, 2, akhir=3)")
 
     def test_kwargs_dict_unknown_key_raises(self):
         with pytest.raises(MatalabJeGhalti, match="Achanak keyword"):
@@ -220,10 +217,13 @@ class TestSilsiloKwargs:
         [
             "silsilo(1, 2, akhir=3)",
             "silsilo(1, 2, 3, shuru=0)",
+            "silsilo(1, 2, 3, qadam=1)",
             "silsilo(shuru=1, 2)",
         ],
     )
     def test_repeated_argument_raises(self, code):
+        # shuru=0 and qadam=1 here are worth pinning: they equal their defaults,
+        # so only this path shows they were supplied rather than filled in
         with pytest.raises(MatalabJeGhalti, match=r"(?i)dobara"):
             run(code)
 
