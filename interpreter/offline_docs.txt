@@ -61,6 +61,6 @@ val = operation()!!         # Panic unwrap, crashes on error
 likh(values..., vich=" ", akhir="\n") : Prints values, vich between them, akhir after
 puch(msg)   : Takes user input
 lambi(x)    : Returns the length of collection x
-silsilo(n)  : Lazy range 0..n (start, end, step variants)
+silsilo(n)  : Lazy range 0..n (shuru/akhir/qadam keywords too)
 majmuo(...) : Builds a set
 qisam(x)    : Returns the type name of x

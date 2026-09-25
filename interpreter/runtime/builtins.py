@@ -20,6 +20,11 @@ def register(registry_dict):
     return decorator
 
 
+KWARG_UNSET = object()
+
+SILSILO_SLOTS = ("shuru", "akhir", "qadam")
+
+
 class SimpleBuiltins:
     """Built-in standalone functions available in the global scope."""
 
@@ -28,9 +33,12 @@ class SimpleBuiltins:
     # Registered-name -> {keyword argument: default value}. The VM validates
     # every keyword against this spec, fills defaults, then hands the bound
     # kwargs dict to the builtin. Builtins absent from this mapping reject
-    # all keyword arguments.
+    # all keyword arguments. A spec whose defaults are KWARG_UNSET declares
+    # names the builtin must distinguish "caller passed it" from "filled in
+    # for the caller" — it recovers the passed ones by identity.
     kwarg_specs: ClassVar[dict] = {
         "likh": {"vich": SdString(" "), "akhir": SdString("\n")},
+        "silsilo": dict.fromkeys(SILSILO_SLOTS, KWARG_UNSET),
     }
 
     @staticmethod
@@ -84,31 +92,56 @@ class SimpleBuiltins:
         prompt = " ".join(str(arg) for arg in args)
         return SdString(input(prompt))
 
+    @staticmethod
+    def silsilo_adad(label, value):
+        """Require an int SdNumber, reporting it as ``label`` in the message."""
+        if not isinstance(value, SdNumber):
+            raise QisamJeGhalti(
+                f"silsilo() khe '{label}' argument 'adad' khapyo paye, par "
+                f"'{value.type.name}' milyo."
+            )
+        if not isinstance(value.value, int):
+            raise QisamJeGhalti(
+                f"silsilo() khe '{label}' argument 'adad' khapyo paye, par 'dahai' milyo."
+            )
+        return int(value.value)
+
     @register(functions)
     def silsilo(self, args, kwargs=None):
-        """Return a lazy range of numbers from start (inclusive) to end (exclusive) with step."""
-        for i, arg in enumerate(args):
-            if not isinstance(arg, SdNumber):
-                raise QisamJeGhalti(
-                    f"silsilo() khe '{i + 1}jo' argument 'adad' khapyo paye, par "
-                    f"'{arg.type.name}' milyo."
-                )
-            if not isinstance(arg.value, int):
-                raise QisamJeGhalti(
-                    f"silsilo() khe '{i + 1}jo' argument 'adad' khapyo paye, par 'dahai' milyo."
-                )
-        if len(args) == 1:
-            start, end, step = 0, int(args[0].value), 1
-        elif len(args) == 2:
-            start, end, step = int(args[0].value), int(args[1].value), 1
-        elif len(args) == 3:
-            start, end, step = (
-                int(args[0].value),
-                int(args[1].value),
-                int(args[2].value),
-            )
+        """Return a lazy range from shuru (inclusive) to akhir (exclusive) stepping by qadam."""
+        supplied = (
+            {}
+            if kwargs is None
+            else {name: value for name, value in kwargs.items() if value is not KWARG_UNSET}
+        )
+
+        if not supplied:
+            values = [self.silsilo_adad(f"{i + 1}jo", arg) for i, arg in enumerate(args)]
+            if len(values) == 1:
+                start, end, step = 0, values[0], 1
+            elif len(values) == 2:
+                start, end, step = values[0], values[1], 1
+            elif len(values) == 3:
+                start, end, step = values
+            else:
+                raise MatalabJeGhalti("silsilo() khe 1, 2, ya 3 arguments khapan.")
         else:
-            raise MatalabJeGhalti("silsilo() khe 1, 2, ya 3 arguments khapan.")
+            if len(args) > len(SILSILO_SLOTS):
+                raise MatalabJeGhalti("silsilo() khe 1, 2, ya 3 arguments khapan.")
+            bound = {}
+            for i, arg in enumerate(args):
+                slot = SILSILO_SLOTS[i]
+                if slot in supplied:
+                    raise MatalabJeGhalti(f"silsilo() khe '{slot}' argument dobara milo.")
+                bound[slot] = self.silsilo_adad(f"{i + 1}jo", arg)
+            for slot, value in supplied.items():
+                bound[slot] = self.silsilo_adad(slot, value)
+            if "akhir" not in bound:
+                raise MatalabJeGhalti("silsilo() khe 'akhir' argument laai value lazmi aahe.")
+            start = bound.get("shuru", 0)
+            end = bound["akhir"]
+            step = bound.get("qadam", 1)
+
         if step == 0:
             raise HalndeVaktGhalti("silsilo() jo step zero (0) natho thi saghjay.")
 

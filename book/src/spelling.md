@@ -36,7 +36,7 @@ The table gives each Sindhi letter's **base** Sindlish mapping. Context-dependen
 - **ع / ء carriers.** Word-initial they render the carried vowel and vanish (`adad`); medial they drop entirely (`majmuo`, `aalmi`).
 - **Consonants strict, vowels lenient.** A name is re-spelled only when its *consonants* violate the map; vowel letters are never audited. The **replacement rows below are declared lexical exceptions**: their `Script` values are full words, not letter-by-letter inputs to the map, so `jaga` (جڳهه — root consonants `j-gg-h`, *not* `j-g`) and `JagaJeGhalti` are not re-audited consonant by consonant.
 
-## English-origin replacements (SEP 80)
+## English-origin replacements (SEP 80, SEP 81)
 
 Names whose consonants were fine but whose *source word* was English were replaced outright — the old name is rejected, no alias:
 
@@ -49,6 +49,11 @@ Names whose consonants were fine but whose *source word* was English were replac
 | `IndexJeGhalti` | `JagaJeGhalti` | جڳهه جي غلطي | *position-mistake* |
 | `likh(sep=)` | `likh(vich=)` | وچ ۾ | *between* |
 | `likh(end=)` | `likh(akhir=)` | آخِر | *end* |
+| `silsilo(start=)` | `silsilo(shuru=)` | شروع | *start* |
+| `silsilo(stop=)` | `silsilo(akhir=)` | آخِر | *end* |
+| `silsilo(step=)` | `silsilo(qadam=)` | قدم | *step* |
+
+`silsilo`'s stop and `likh`'s end are the same word — both are the exclusive end — so both are `akhir` (آخِر, "end"; SLA "end": پڇاڙي, خاتمو, آخِر). The earlier provisional `ant` was dropped: the SLA dictionary's "ant" entry means the insect, not "end". `shuru` and `qadam` are new names rather than renames, chosen by the ladder and recorded here so no later SEP re-derives them ([SEP 81](https://github.com/Sindlish/Sindlish/issues/81)). The English spellings are rejected outright, like the old `likh` names.
 
 `defaultrakh` (setdefault) is the one **retained** English-origin name: the SLA dictionary glosses "default" as negligence/fault (غفلت, خطا) with no usable native term, so the name survives as a registered exception. `ok` (Result), `match` (retired by work in #70) and `_` (wildcard) are the other retained exceptions.
 
