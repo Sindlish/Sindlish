@@ -33,12 +33,12 @@ class SimpleBuiltins:
     # Registered-name -> {keyword argument: default value}. The VM validates
     # every keyword against this spec, fills defaults, then hands the bound
     # kwargs dict to the builtin. Builtins absent from this mapping reject
-    # all keyword arguments. A default of KWARG_UNSET is the way a spec says
-    # "this name matters but has no default": the builtin reads it back to
-    # tell a name the caller passed from one filled in on the caller's behalf.
+    # all keyword arguments. A default of KWARG_UNSET is how a spec declares
+    # a name it recognises but gives no default for; likh supplies real
+    # defaults, silsilo leaves all three to the builtin.
     kwarg_specs: ClassVar[dict] = {
         "likh": {"vich": SdString(" "), "akhir": SdString("\n")},
-        "silsilo": dict.fromkeys(SILSILO_SLOTS, KWARG_UNSET),
+        "silsilo": {"shuru": KWARG_UNSET, "akhir": KWARG_UNSET, "qadam": KWARG_UNSET},
     }
 
     @staticmethod
@@ -51,17 +51,6 @@ class SimpleBuiltins:
         for key, default in spec.items():
             kwargs.setdefault(key, default)
         return kwargs
-
-    @staticmethod
-    def passed_kwargs(kwargs: dict) -> dict:
-        """Return only the declared keyword arguments the caller actually passed.
-
-        ``resolve_kwargs`` fills every declared default before the builtin
-        runs, so a builtin whose spec declares ``KWARG_UNSET`` needs this to
-        recover the caller's own names by identity — a value comparison would
-        lose a name passed as ``0`` or ``1`` when that is also its default.
-        """
-        return {key: value for key, value in kwargs.items() if value is not KWARG_UNSET}
 
     @register(functions)
     def majmuo(self, args, kwargs=None):
@@ -120,9 +109,13 @@ class SimpleBuiltins:
     @register(functions)
     def silsilo(self, args, kwargs=None):
         """Return a lazy range from shuru (inclusive) to akhir (exclusive) stepping by qadam."""
-        supplied = self.passed_kwargs(kwargs) if kwargs else {}
+        given = {} if kwargs is None else kwargs
+        # resolve_kwargs has already filled every declared default, so the names
+        # still holding KWARG_UNSET are the ones the caller never wrote. Reading
+        # them back by identity is what lets shuru=0 and qadam=1 count as passed.
+        written = {name: value for name, value in given.items() if value is not KWARG_UNSET}
 
-        if not supplied:
+        if not written:
             values = [self.silsilo_adad(f"{i + 1}jo", arg) for i, arg in enumerate(args)]
             if len(values) == 1:
                 start, end, step = 0, values[0], 1
@@ -138,20 +131,18 @@ class SimpleBuiltins:
             bound = {}
             for i, arg in enumerate(args):
                 slot = SILSILO_SLOTS[i]
-                if slot in supplied:
+                if slot in written:
                     raise MatalabJeGhalti(f"silsilo() khe '{slot}' argument dobara milo.")
                 bound[slot] = self.silsilo_adad(f"{i + 1}jo", arg)
-            for slot, value in supplied.items():
-                bound[slot] = self.silsilo_adad(slot, value)
+            for name, value in written.items():
+                bound[name] = self.silsilo_adad(name, value)
             if "akhir" not in bound:
                 raise MatalabJeGhalti("silsilo() khe 'akhir' argument laai value lazmi aahe.")
             start = bound.get("shuru", 0)
             end = bound["akhir"]
             step = bound.get("qadam", 1)
-
         if step == 0:
             raise HalndeVaktGhalti("silsilo() jo qadam zero (0) natho thi saghjay.")
-
         return SdRange(start, end, step)
 
     @register(functions)
