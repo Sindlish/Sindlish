@@ -191,8 +191,8 @@ class TestSilsiloKwargs:
         with pytest.raises(MatalabJeGhalti, match="Achanak keyword"):
             run('k = {"bogus": 1}\nsilsilo(1, 5, **k)')
 
-    def test_zero_step_raises(self):
-        with pytest.raises(HalndeVaktGhalti, match="(?i)step"):
+    def test_zero_qadam_raises(self):
+        with pytest.raises(HalndeVaktGhalti, match="(?i)qadam"):
             run("silsilo(akhir=10, qadam=0)")
 
     @pytest.mark.parametrize(

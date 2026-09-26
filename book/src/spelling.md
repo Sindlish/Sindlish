@@ -66,7 +66,7 @@ Names whose consonants were fine but whose *source word* was English were replac
 
 Because no English spelling of these three ever shipped, `silsilo(start=)`, `silsilo(stop=)` and `silsilo(step=)` are simply not recognised names — an unknown-keyword `MatalabJeGhalti` — matching the clean-break treatment of the old `likh` names.
 
-`defaultrakh` (setdefault) is the one **retained** English-origin name: the SLA dictionary glosses "default" as negligence/fault (غفلت, خطا) with no usable native term, so the name survives as a registered exception. `ok` (Result), `match` (retired by work in #70) and `_` (wildcard) are the other retained exceptions.
+The zero-step `HalndeVaktGhalti` was the last English holdout in a `silsilo` message; it now names the keyword (`silsilo() jo qadam zero (0) natho thi saghjay.`). Errors follow the same rule as identifiers: a message that talks about a named thing spells that thing in Sindhi.
 
 ## Where the map is enforced
 

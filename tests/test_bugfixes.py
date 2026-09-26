@@ -330,8 +330,8 @@ class TestCollectionsAndBuiltins:
         with pytest.raises(LikhaiJeGhalti, match="sirf hikro argument"):
             run("majmuo(1, 2)")
 
-    def test_silsilo_zero_step_raises(self):
-        with pytest.raises(HalndeVaktGhalti, match="step"):
+    def test_silsilo_zero_qadam_raises(self):
+        with pytest.raises(HalndeVaktGhalti, match="qadam"):
             run("silsilo(0, 10, 0)")
 
     def test_set_literal_unhashable_clean_error(self):

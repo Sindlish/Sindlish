@@ -150,7 +150,7 @@ class SimpleBuiltins:
             step = bound.get("qadam", 1)
 
         if step == 0:
-            raise HalndeVaktGhalti("silsilo() jo step zero (0) natho thi saghjay.")
+            raise HalndeVaktGhalti("silsilo() jo qadam zero (0) natho thi saghjay.")
 
         return SdRange(start, end, step)
 
