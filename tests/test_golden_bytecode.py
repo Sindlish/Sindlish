@@ -327,6 +327,20 @@ PROGRAMS = [
             ("HALT", None),
         ),
     ),
+    (
+        # constants: 0=1, 1=10, 2=KwargMarker("qadam"), 3=2, 4="silsilo", 5="r"
+        "silsilo_kwarg_call",
+        "r = silsilo(1, 10, qadam=2)",
+        (
+            ("LOAD_CONST", 0),
+            ("LOAD_CONST", 1),
+            ("LOAD_CONST", 2),
+            ("LOAD_CONST", 3),
+            ("CALL_FUNCTION", (4, 4, True)),
+            ("STORE_GLOBAL", (5, False, None, None)),
+            ("HALT", None),
+        ),
+    ),
 ]
 
 

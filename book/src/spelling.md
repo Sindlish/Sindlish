@@ -52,6 +52,22 @@ Names whose consonants were fine but whose *source word* was English were replac
 
 `defaultrakh` (setdefault) is the one **retained** English-origin name: the SLA dictionary glosses "default" as negligence/fault (غفلت, خطا) with no usable native term, so the name survives as a registered exception. `ok` (Result), `match` (retired by work in #70) and `_` (wildcard) are the other retained exceptions.
 
+## Keyword argument names added by SEP 81
+
+`silsilo`'s three keyword arguments are **new names, not renames** — no English spelling of them ever shipped, so they are not on the rejection list above:
+
+| Keyword | Script | Meaning | Source |
+|---|---|---|---|
+| `silsilo(shuru=)` | شروع | *start* | ladder: SLA "start" (source to be confirmed) |
+| `silsilo(akhir=)` | آخِر | *end* | SLA "end": پڇاڙي, خاتمو, آخِر — settled in SEP 80 |
+| `silsilo(qadam=)` | قدم | *step* | ladder: SLA "step" (source to be confirmed) |
+
+`silsilo`'s stop and `likh`'s end are the same word — both are the exclusive end — so both are `akhir`. The earlier provisional `ant` was dropped: the SLA dictionary's "ant" entry means the insect, not "end".
+
+Because no English spelling of these three ever shipped, `silsilo(start=)`, `silsilo(stop=)` and `silsilo(step=)` are simply not recognised names — an unknown-keyword `MatalabJeGhalti` — matching the clean-break treatment of the old `likh` names.
+
+The zero-step `HalndeVaktGhalti` was the last English holdout in a `silsilo` message; it now names the keyword (`silsilo() jo qadam zero (0) natho thi saghjay.`). Errors follow the same rule as identifiers: a message that talks about a named thing spells that thing in Sindhi.
+
 ## Where the map is enforced
 
 Registered method names are produced from type `_methods` keys — tooling consumes the registry directly for the grammar and completions, so a rename in `collections.py` propagates to `vscode-extension/syntaxes/*.json` via `tools/generate_grammar.py`. Error classes keep the same internal machinery (`ERROR_MAP`); only their public spelling changes. User programs are **advisory**: the standard recommends, the compiler never enforces.

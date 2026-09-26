@@ -13,9 +13,11 @@ Builtins are seeded into this environment at startup (`tests/conftest.py` shows 
 | `likh(values..., vich=" ", akhir="\n")` | joins values with `vich`, finishes with `akhir`; does **not** consume Results |
 | `puch(prompt)` | returns `SdString` |
 | `lambi(x)` | works on strings, lists/dicts/sets, ranges |
-| `silsilo(a[,b[,c]])` | returns **lazy** `SdRange` (O(1) length, indexable) |
+| `silsilo([shuru=]akhir[, qadam])` | returns **lazy** `SdRange` (O(1) length, indexable); `shuru`/`akhir`/`qadam` also bindable as keywords |
 | `qisam(x)` | returns the type name of `x` as a `lafz` |
 | `majmuo([iterable])` | 0 or 1 args |
+
+Keywords reach a builtin only through `kwarg_specs` (`builtins.py`): the VM rejects unknown names, fills declared defaults, and hands the dict over. A builtin whose spec declares `KWARG_UNSET` defaults recovers which names the caller *actually* passed by identity — that is how `silsilo` tells `silsilo(1, 10, qadam=2)` from `silsilo(1, 10, 2)`. Positionals fill `shuru`, `akhir`, `qadam` left to right, so `silsilo(1, 2, akhir=3)` reports the repeated argument rather than quietly shifting slots.
 
 ## 🖥️ The REPL (`interpreter/repl.py`)
 

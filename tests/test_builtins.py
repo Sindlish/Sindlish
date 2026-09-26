@@ -1,9 +1,9 @@
-"""Tests for builtin functions: lambi and likh (as function call)."""
+"""Tests for builtin functions: lambi, likh and silsilo (as function call)."""
 
 import pytest
 
-from interpreter.errors import MatalabJeGhalti
-from tests.conftest import extract_value, run
+from interpreter.errors import HalndeVaktGhalti, MatalabJeGhalti, QisamJeGhalti
+from tests.conftest import extract_value, get_variable_value, run
 
 
 class TestLambi:
@@ -92,6 +92,150 @@ class TestLikhKwargs:
             run('k = {"bogus": 1}\nlikh("x", **k)')
 
 
+def silsilo_value(expr):
+    """Run a silsilo expression and hand back the SdRange it produced."""
+    vm, _ = run(f"r = {expr}")
+    return get_variable_value(vm, "r")
+
+
+def range_shape(sd_range):
+    """Reduce a SdRange to the shape the SEP compares: bounds, len, iteration."""
+    return (
+        sd_range.start,
+        sd_range.stop,
+        sd_range.step,
+        len(sd_range),
+        [n.value for n in sd_range],
+    )
+
+
+class TestSilsiloKwargs:
+    """silsilo(shuru=, akhir=, qadam=) keyword arguments (SEP 81)."""
+
+    @pytest.mark.parametrize(
+        "kwarg_call,positional_twin",
+        [
+            ("silsilo(akhir=5)", "silsilo(5)"),
+            ("silsilo(shuru=1, akhir=5)", "silsilo(1, 5)"),
+            ("silsilo(shuru=1, akhir=10, qadam=2)", "silsilo(1, 10, 2)"),
+            ("silsilo(qadam=2, akhir=10)", "silsilo(0, 10, 2)"),
+            ("silsilo(shuru=10, akhir=0, qadam=-2)", "silsilo(10, 0, -2)"),
+            ("silsilo(shuru=5, akhir=1)", "silsilo(5, 1)"),
+        ],
+    )
+    def test_keyword_form_equals_positional_twin(self, kwarg_call, positional_twin):
+        assert range_shape(silsilo_value(kwarg_call)) == range_shape(
+            silsilo_value(positional_twin)
+        )
+
+    @pytest.mark.parametrize(
+        "mixed_call,positional_twin",
+        [
+            ("silsilo(1, 2, qadam=3)", "silsilo(1, 2, 3)"),
+            ("silsilo(1, akhir=5, qadam=2)", "silsilo(1, 5, 2)"),
+        ],
+    )
+    def test_mixed_positional_and_keyword(self, mixed_call, positional_twin):
+        assert range_shape(silsilo_value(mixed_call)) == range_shape(
+            silsilo_value(positional_twin)
+        )
+
+    def test_kwargs_dict_splat(self):
+        code = 'k = {"shuru": 1, "akhir": 10, "qadam": 2}\nr = silsilo(**k)'
+        vm, _ = run(code)
+        assert range_shape(get_variable_value(vm, "r")) == range_shape(
+            silsilo_value("silsilo(1, 10, 2)")
+        )
+
+    def test_keyword_names_are_independent_of_order(self):
+        assert range_shape(silsilo_value("silsilo(shuru=1, qadam=2, akhir=10)")) == range_shape(
+            silsilo_value("silsilo(1, 10, 2)")
+        )
+
+    def test_star_args_splat_reaches_the_positional_path(self):
+        assert range_shape(silsilo_value("silsilo(*[1, 2])")) == range_shape(
+            silsilo_value("silsilo(1, 2)")
+        )
+
+    def test_empty_kwargs_dict_splat_is_no_keywords(self):
+        assert range_shape(silsilo_value("silsilo(1, 2, **{})")) == range_shape(
+            silsilo_value("silsilo(1, 2)")
+        )
+
+    def test_empty_kwargs_dict_splat_does_not_satisfy_the_arity_rule(self):
+        with pytest.raises(MatalabJeGhalti, match=r"1, 2, ya 3"):
+            run("silsilo(**{})")
+
+    def test_range_stays_lazy(self):
+        _, out = run("likh(qisam(silsilo(1, 5, qadam=2)))")
+        assert out.strip() == "SILSILO"
+
+    def test_str_representation_unchanged(self):
+        _, out = run("likh(silsilo(shuru=1, akhir=5, qadam=2))")
+        assert "silsilo(1, 5, 2)" in out
+
+    @pytest.mark.parametrize("name", ["bogus", "start", "stop", "step", "ant"])
+    def test_unknown_kwarg_raises(self, name):
+        with pytest.raises(MatalabJeGhalti, match="Achanak keyword"):
+            run(f"silsilo(1, 5, {name}=1)")
+
+    def test_sep_repeat_argument_example_reports_the_renamed_keyword(self):
+        # SEP 81's example is silsilo(1, 2, stop=3); #80 rejected `stop`, so it
+        # now lands as an unknown keyword, and the repeat case is `akhir`
+        with pytest.raises(MatalabJeGhalti, match="Achanak keyword"):
+            run("silsilo(1, 2, stop=3)")
+        with pytest.raises(MatalabJeGhalti, match=r"(?i)dobara"):
+            run("silsilo(1, 2, akhir=3)")
+
+    def test_kwargs_dict_unknown_key_raises(self):
+        with pytest.raises(MatalabJeGhalti, match="Achanak keyword"):
+            run('k = {"bogus": 1}\nsilsilo(1, 5, **k)')
+
+    def test_zero_qadam_raises(self):
+        with pytest.raises(HalndeVaktGhalti, match="(?i)qadam"):
+            run("silsilo(akhir=10, qadam=0)")
+
+    @pytest.mark.parametrize(
+        "code",
+        [
+            "silsilo(shuru=1.5, akhir=5)",
+            "silsilo(shuru=1, akhir=2.5)",
+            "silsilo(shuru=1, akhir=5, qadam=0.5)",
+            'silsilo(shuru="a", akhir=5)',
+        ],
+    )
+    def test_non_integer_keyword_argument_raises(self, code):
+        with pytest.raises(QisamJeGhalti, match=r"(?i)adad"):
+            run(code)
+
+    def test_non_integer_keyword_message_names_the_keyword(self):
+        with pytest.raises(QisamJeGhalti, match="qadam"):
+            run("silsilo(shuru=1, akhir=5, qadam=1.5)")
+
+    @pytest.mark.parametrize(
+        "code",
+        [
+            "silsilo(1, 2, akhir=3)",
+            "silsilo(1, 2, 3, shuru=0)",
+            "silsilo(1, 2, 3, qadam=1)",
+            "silsilo(shuru=1, 2)",
+        ],
+    )
+    def test_repeated_argument_raises(self, code):
+        # shuru=0 and qadam=1 here are worth pinning: they equal their defaults,
+        # so only this path shows they were supplied rather than filled in
+        with pytest.raises(MatalabJeGhalti, match=r"(?i)dobara"):
+            run(code)
+
+    def test_missing_akhir_raises(self):
+        with pytest.raises(MatalabJeGhalti, match="akhir"):
+            run("silsilo(1, qadam=3)")
+
+    def test_too_many_positional_and_keyword_raises(self):
+        with pytest.raises(MatalabJeGhalti, match=r"1, 2, ya 3"):
+            run("silsilo(1, 2, 3, 4, qadam=1)")
+
+
 class TestBuiltinKwargRejection:
     """Builtins without a kwarg spec reject any keyword argument."""
 
@@ -99,6 +243,14 @@ class TestBuiltinKwargRejection:
         with pytest.raises(MatalabJeGhalti, match="Achanak keyword"):
             run('lambi("abc", bogus=1)')
 
-    def test_silsilo_rejects_known_kwarg_name(self):
+    def test_puch_rejects_kwargs(self):
+        with pytest.raises(MatalabJeGhalti, match="Achanak keyword"):
+            run("puch('hi', bogus=1)")
+
+    def test_qisam_rejects_kwargs(self):
+        with pytest.raises(MatalabJeGhalti, match="Achanak keyword"):
+            run("qisam(1, bogus=1)")
+
+    def test_english_step_kwarg_raises(self):
         with pytest.raises(MatalabJeGhalti, match="Achanak keyword"):
             run("silsilo(1, 5, step=1)")

@@ -27,6 +27,7 @@
 | 15 | Functional builtins | `chunta` `tabdeel` `jama` | #56 | P1 |
 | 16 | Utility builtins | `zbaar` `jora` `badlo` `ashl` `lambai` | #77 | P1 |
 | 17 | `likh` kwargs | `likh(vich=, akhir=)` | #78, #80 | P1 |
+| 18 | `silsilo` kwargs | `silsilo(shuru=, akhir=, qadam=)` | #81 | P1 |
 
 ---
 
@@ -273,6 +274,19 @@ likh("a", "b", vich=", ", akhir="!\n")
 
 - `vich` default `" "`; `akhir` default `"\n"`.
 - `chunta`/`tabdeel`/`jama`/`zbaar`/`jora`/`badlo`/`ashl`/`lambai` are **builtins** (global), not methods.
+
+## 18. `silsilo` keyword args
+
+```
+silsilo(shuru=1, akhir=10, qadam=2)     # 1, 3, 5, 7, 9
+silsilo(qadam=2, akhir=10)              # 0, 2, 4, 6, 8
+silsilo(1, 10, qadam=2)                 # mixed
+```
+
+- `shuru` default `0`; `qadam` default `1`; `akhir` is required unless supplied.
+- Positional calls are unchanged: 1 arg is `akhir`, 2 are `shuru, akhir`, 3 add `qadam`.
+- Positionals fill `shuru`, `akhir`, `qadam` left to right, so a keyword naming an already-filled slot is a repeated-argument `MatalabJeGhalti`.
+- All three take `adad` only; `qadam = 0` is a `HalndeVaktGhalti`, as for the positional form.
 
 ---
 

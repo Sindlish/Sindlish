@@ -19,7 +19,7 @@ sequenceDiagram
         VM->>NF: fill param slots / cells
         VM->>VM: frames.append(new)
     else builtin
-        VM->>VM: simple_handler.fn(args)<br>(no kwargs allowed)
+        VM->>VM: resolve_kwargs(name, kwargs)<br>reject unknown names, fill defaults<br>fn(args, kwargs)
     end
 ```
 
@@ -28,6 +28,7 @@ Details worth knowing (`vm.py:_call_sd_function`):
 - **Binding priority**: explicit kwargs beat positionals; defaults evaluated *at definition time* ride on the `SdFunction`.
 - **Result-aware binding**: an Ok parcel passed to a parameter is unwrapped before the declared type check; Ghalti passes through.
 - **`*param` collects leftovers into a list, `**kw` into a dict.** Unknown kwarg names → clean `MatalabJeGhalti`.
+- **Builtins have no signature**, so `kwarg_specs` is their entire parameter contract: names absent from it are rejected, declared ones arrive pre-filled with defaults. A builtin whose spec defaults to `KWARG_UNSET` reads the ones the caller really passed by identity (`silsilo`).
 - The caller's stack is untouched by the callee — it gets a fresh frame with its own slots.
 
 ## Flow 2 · Method dispatch

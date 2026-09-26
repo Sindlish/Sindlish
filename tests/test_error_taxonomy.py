@@ -92,7 +92,7 @@ class TestMatalabJeGhalti:
         with pytest.raises(MatalabJeGhalti):
             run(code)
 
-    def test_zero_step_is_not_arity(self):
+    def test_zero_qadam_is_not_arity(self):
         with pytest.raises(Exception) as exc_info:
             run("silsilo(0, 10, 0)")
         assert not isinstance(exc_info.value, MatalabJeGhalti)

@@ -41,7 +41,7 @@ flowchart TD
 | `objects/strings.py` | 104 | `SdString`. |
 | `objects/collections.py` | 694 | List/dict/set/range + all registered native methods. |
 | `runtime/env.py` | 78 | Globals `Environment`: name → `VariableRecord(value, type, is_const)`. |
-| `runtime/builtins.py` | 111 | `likh`, `puch`, `lambi`, `majmuo`, `silsilo`, `qisam`. |
+| `runtime/builtins.py` | 169 | `likh`, `puch`, `lambi`, `majmuo`, `silsilo`, `qisam`. |
 | `errors.py` | 200 | Error hierarchy + ANSI-pretty `ErrorReporter`. |
 | `repl.py` | 197 | Interactive shell with highlighting/completion. |
 | `cli.py` | ~270 | The actual CLI: `run / repl / eval / tokens / ast / check / docs`. |
