@@ -13,6 +13,7 @@ from .ast_nodes import (
     GetAttrNode,
     GhaltiNode,
     GlobalNode,
+    IfExpNode,
     IfNode,
     IndexNode,
     ListNode,
@@ -545,8 +546,41 @@ class Parser:
         )
 
     def parse_expression(self) -> Node:
-        """Entry point for the expression precedence chain. Alias for parse_or()."""
-        return self.parse_or()
+        """Entry point for the expression precedence chain. Alias for parse_ternary()."""
+        return self.parse_ternary()
+
+    def parse_ternary(self) -> Node:
+        """Parse `or ("agar" or "warna" or)*` and return an IfExpNode or passthrough.
+
+        Left-associative: `a agar b warna c agar d warna e` groups as
+        `(a agar b warna c) agar d warna e`; nested ternaries in the condition
+        or else arm require parens. Raises LikhaiJeGhalti when `agar` is not
+        followed by a `warna` arm.
+        """
+        node = self.parse_or()
+
+        while self.peek().type == TokenType.AGAR:
+            agar = self.advance()  # agar
+            self._skip_newlines()
+            condition = self.parse_or()
+            self._skip_newlines()
+
+            if self.peek().type != TokenType.WARNA:
+                raise LikhaiJeGhalti(
+                    "Ternary khaan poe 'warna' lazmi aahe; likho: x agar shart warna y.",
+                    agar.line,
+                    agar.column,
+                    self.code,
+                )
+            self.advance()  # warna
+            self._skip_newlines()
+            else_body = self.parse_or()
+
+            node = IfExpNode(condition, node, else_body).set_pos(
+                agar.line, agar.column
+            )
+
+        return node
 
     def parse_or(self) -> Node:
         """Parse `and ("ya" and)*` and return a BinaryOpNode or passthrough."""

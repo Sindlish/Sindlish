@@ -68,7 +68,7 @@ Note how `adad` became token type `ADAD` — the keyword table (`interpreter/fro
 
 ## Stop 2 · Parser: pieces become a tree
 
-The parser (`interpreter/frontend/parser.py`) is a classic **recursive descent** parser: one method per grammar rule, precedence encoded by which method calls which. It consumes the token list and grows an **AST** — Abstract Syntax Tree — where each node is one of the 36 classes in `ast_nodes.py`.
+The parser (`interpreter/frontend/parser.py`) is a classic **recursive descent** parser: one method per grammar rule, precedence encoded by which method calls which. It consumes the token list and grows an **AST** — Abstract Syntax Tree — where each node is one of the 33 classes in `ast_nodes.py`.
 
 For the two statements of our specimen (function-free demo shown for readability):
 

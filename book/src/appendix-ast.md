@@ -2,7 +2,7 @@
 
 <div class="youarehere">📍 <strong>You are here:</strong> Appendix · Reference</div>
 
-Every syntactic construct in Sindlish is represented by a `Node` subclass in `interpreter/frontend/ast_nodes.py`. There are **32 node classes**, all subclassing `Node` (which owns `line`/`column` source position). They are `@dataclass(slots=True)` with position initialized at construction and stamped via `set_pos()`.
+Every syntactic construct in Sindlish is represented by a `Node` subclass in `interpreter/frontend/ast_nodes.py`. There are **33 node classes**, all subclassing `Node` (which owns `line`/`column` source position). They are `@dataclass(slots=True)` with position initialized at construction and stamped via `set_pos()`.
 
 Fields marked *resolver-stamped* are filled in during the resolver pass, not by the parser.
 
@@ -30,6 +30,7 @@ Fields marked *resolver-stamped* are filled in during the resolver pass, not by 
 | `BinaryOpNode` | `left, op, right` | Binary operation (`+ - * / % ^`, comparisons, `aen`/`ya`) |
 | `UnaryOpNode` | `op, right` | Unary operation (`-x`, `nah x`) |
 | `PostfixOpNode` | `expr, op` | Postfix `?` / `!!` |
+| `IfExpNode` | `condition, body, else_body` | Ternary expression `x agar shart warna y` (SEP #46) |
 
 ## Statements
 
@@ -81,5 +82,5 @@ Fields marked *resolver-stamped* are filled in during the resolver pass, not by 
 | `TypeCastNode` | `target_type, expr` | `adad(x)`, `lafz(y)`, … |
 
 <div class="recap">
-<p>32 node classes total. The resolver stamps <code>hints</code> (slot index, scope level, inferred type) onto the nodes that need them; the compiler reads only those nodes plus literal structure.</p>
+<p>33 node classes total. The resolver stamps <code>hints</code> (slot index, scope level, inferred type) onto the nodes that need them; the compiler reads only those nodes plus literal structure.</p>
 </div>

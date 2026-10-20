@@ -341,6 +341,38 @@ PROGRAMS = [
             ("HALT", None),
         ),
     ),
+    (
+        # constants: 0=3, 1=2, 2=5, 3=9, 4="x" (condition compiles first)
+        "ternary_assign",
+        "x = 5 agar 3 > 2 warna 9",
+        (
+            ("LOAD_CONST", 0),
+            ("LOAD_CONST", 1),
+            ("COMPARE_GT", None),
+            ("JUMP_IF_FALSE", 6),
+            ("LOAD_CONST", 2),
+            ("JUMP_ABSOLUTE", 7),
+            ("LOAD_CONST", 3),
+            ("STORE_GLOBAL", (4, False, None, None)),
+            ("HALT", None),
+        ),
+    ),
+    (
+        # statement-position ternary discards its value via POP_TOP
+        "ternary_statement",
+        "5 agar 3 > 2 warna 9",
+        (
+            ("LOAD_CONST", 0),
+            ("LOAD_CONST", 1),
+            ("COMPARE_GT", None),
+            ("JUMP_IF_FALSE", 6),
+            ("LOAD_CONST", 2),
+            ("JUMP_ABSOLUTE", 7),
+            ("LOAD_CONST", 3),
+            ("POP_TOP", None),
+            ("HALT", None),
+        ),
+    ),
 ]
 
 

@@ -20,7 +20,8 @@ statement   = if_stmt
             | nonlocal_decl
             | expression
 
-expression  = or
+expression  = ternary
+ternary     = or ("agar" or "warna" or)*   (* left-assoc; both arms mandatory *)
 or          = and ("ya" and)*
 and         = not ("aen" not)*
 not         = "nah" not | comparison

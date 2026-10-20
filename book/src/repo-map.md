@@ -27,7 +27,7 @@ flowchart TD
 | `frontend/lexer.py` | 328 | Characters → tokens. Dispatch table for simple chars, methods for strings/numbers/operators. |
 | `frontend/tokens.py` | 104 | `TokenType` enum (57 members) + frozen `Token` dataclass. |
 | `frontend/keywords.py` | 53 | The Sindhi→TokenType dictionary. **Adding a keyword starts here.** |
-| `frontend/ast_nodes.py` | 368 | 32 node classes; each carries `(line, column)`. |
+| `frontend/ast_nodes.py` | 368 | 33 node classes; each carries `(line, column)`. |
 | `frontend/parser.py` | 1257 | Recursive-descent parser; precedence via method-call nesting. |
 | `analysis/resolver.py` | 834 | Scope stack, slot allocation, closure capture analysis, static type checks. |
 | `backend/opcodes.py` | 167 | The 50-opcode `IntEnum` + operand parsing. |
