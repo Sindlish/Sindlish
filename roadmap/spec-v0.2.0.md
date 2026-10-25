@@ -20,7 +20,7 @@
 | 8 | Lambdas | `kaam(x) wapas expr` | #49 | P1 |
 | 9 | Do-while | `kar { ... } jistain cond` | #50 | P2 |
 | 10 | Deep equality / identity | `==` / `aa` | #51 | P1 |
-| 11 | Compound assignment | `+= -= *= /= %= ^=` | #52 | P0 |
+| 11 | Compound assignment / increment | `+= -= *= /= %= ^=`, `i++` `i--` | #52 | P0 |
 | 12 | Slicing | `list[a:b:c]` | #53 | P1 |
 | 13 | Iterable unpacking | `a, *rest = [...]` | #54 | P1 |
 | 14 | String methods | 38 methods | #55, #75, #76 | P2 |
@@ -158,6 +158,10 @@ kar { ... } jistain cond
 ## 11. Compound assignment
 
 - `x += 1  x -= 1  x *= 2  x /= 2  x %= 3  x ^= 2`
+- **`i++` / `i--`** (SEP 52 rev 2, 2026-10-18): postfix sugar for `x += 1` /
+  `x -= 1`, yielding the value **before** the update; same lvalue and `pakko`
+  rules; prefix `++i` / `--i` and `i++++` are rejected (`LikhaiJeGhalti`);
+  non-numeric target -> `QisamJeGhalti`.
 - **`^=`** matches the language's existing power operator `^` (right-assoc). There is **no `**` token**.
 - Parser rewrites `x op= y` as `x = x op y` at the AST level (one evaluation of the target).
 - Works with subscript targets: `list[0] += 1`, `lughat["a"] -= 1`.

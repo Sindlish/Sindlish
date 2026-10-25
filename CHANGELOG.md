@@ -4,6 +4,16 @@ All notable changes to Sindlish are documented here. The format is based on [Kee
 
 ## [Unreleased]
 
+### Language & runtime
+
+- **Ternary conditional expression** (SEP #46): `x agar shart warna y` —
+  Sindlish's own ternary, sitting below `ya` (or) and above assignment.
+  Left-associative; both arms are mandatory (a missing `warna` is a
+  `LikhaiJeGhalti`), and nested ternaries in the condition or else arm need
+  parens. Compiles to the same `JUMP_IF_FALSE` / `JUMP_ABSOLUTE`
+  back-patching as the `agar` statement, leaving one value on the stack —
+  no new tokens or opcodes. New `IfExpNode` AST node.
+
 ### SEP standard — self-contained proposals
 
 Every language-change issue is now a **SEP** (Sindlish Enhancement Proposal)

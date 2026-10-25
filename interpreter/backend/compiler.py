@@ -26,6 +26,7 @@ from ..frontend.ast_nodes import (
     GetAttrNode,
     GhaltiNode,
     GlobalNode,
+    IfExpNode,
     IfNode,
     IndexNode,
     ListNode,
@@ -138,6 +139,7 @@ EXPRESSION_NODES: tuple[type[Node], ...] = (
     PostfixOpNode,
     GetAttrNode,
     TypeCastNode,
+    IfExpNode,
 )
 
 Instruction = tuple[OpCode, object]
@@ -443,6 +445,22 @@ class Compiler:
 
             if isinstance(stmt, EXPRESSION_NODES):
                 self.emit(OpCode.POP_TOP, node=stmt)
+
+    def compile_IfExpNode(self, node: IfExpNode) -> None:
+        """Compile a ternary (x agar shart warna y) via forward jump back-patching.
+
+        The condition is popped by JUMP_IF_FALSE; each arm leaves exactly one
+        value on the stack, so both paths converge stack-neutral.
+        """
+        self.compile(node.condition)
+        jump_if_false_instr = self.emit(OpCode.JUMP_IF_FALSE, 0, node=node)
+
+        self.compile(node.body)
+        end_jump = self.emit(OpCode.JUMP_ABSOLUTE, 0, node=node)
+
+        self._patch(jump_if_false_instr, OpCode.JUMP_IF_FALSE, self._current_pc())
+        self.compile(node.else_body)
+        self._patch(end_jump, OpCode.JUMP_ABSOLUTE, self._current_pc())
 
     def compile_IfNode(self, node: IfNode) -> None:
         """Compile an agar/yawari/warna chain via forward jump back-patching."""

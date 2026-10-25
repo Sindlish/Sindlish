@@ -7,7 +7,8 @@ Nodes carry source-position information (line, column) for error reporting.
 Grammar summary (simplified):
     program     -> statement* EOF
     statement   -> if | while | assignment | function | return | expr
-    expression  -> or
+    expression  -> ternary
+    ternary     -> or ("agar" or "warna" or)*
     or          -> and ("ya" and)*
     and         -> not ("aen" not)*
     not         -> "nah" not | comparison
@@ -146,6 +147,15 @@ class PostfixOpNode(Node):
 
     expr: Node
     op: Token
+
+
+@dataclass(slots=True, repr=False)
+class IfExpNode(Node):
+    """Conditional expression (x agar shart warna y)."""
+
+    condition: Node
+    body: Node
+    else_body: Node
 
 
 # ===== Statements =====
