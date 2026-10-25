@@ -56,7 +56,7 @@ Everything else falls through to `parse_expression()` — which is also how `lik
 
 ### Declarations: three spellings, one node
 
-All of these become an `AssignNode` (`parser.py:1032`):
+All of these become an `AssignNode` (`parser.py:1047`):
 
 ```sd
 adad x = 5          # type-first
@@ -86,11 +86,11 @@ An unclosed block dies with position info pointing at the **opening** brace — 
 
 ### Calls, kwargs, and markers
 
-Call arguments (`parse_call_arguments`, `parser.py:880`) collect four buckets: positional args, `(name, value)` keyword pairs, one `*expr`, one `**expr`. The compiler later encodes keywords as marker objects in the constant pool so runtime strings can never impersonate parameter names — full story in [compiler.md](compiler.md).
+Call arguments (`parse_call_arguments`, `parser.py:897`) collect four buckets: positional args, `(name, value)` keyword pairs, one `*expr`, one `**expr`. The compiler later encodes keywords as marker objects in the constant pool so runtime strings can never impersonate parameter names — full story in [compiler.md](compiler.md).
 
 ### Method chains: where Results hide
 
-After any primary expression, `parse_postfix` loops over trailing `.name`, `[index]`, `(args)`, `?`, `!!`. Inside `_parse_method_chain` there's a special case with big consequences (`parser.py:741`):
+After any primary expression, `parse_postfix` loops over trailing `.name`, `[index]`, `(args)`, `?`, `!!`. Inside `_parse_method_chain` there's a special case with big consequences (`parser.py:758`):
 
 ```python
 if method_name in ("bachao", "lazmi"):
@@ -101,7 +101,7 @@ if method_name in ("bachao", "lazmi"):
 
 ### Dict or set? One peek decides
 
-Both start with `{`. `parse_dict_set` (`parser.py:1204`) parses the first expression; if the next token is `:` → dict, else → set. Empty `{}` is a dict; use `majmuo()` for an empty set. Chained comparisons (`a < b < c`) are rejected outright with a message telling you to write `(a < b) aen (b < c)`.
+Both start with `{`. `parse_dict_set` (`parser.py:1219`) parses the first expression; if the next token is `:` → dict, else → set. Empty `{}` is a dict; use `majmuo()` for an empty set. Chained comparisons (`a < b < c`) are rejected outright with a message telling you to write `(a < b) aen (b < c)`.
 
 ## Seeing the tree yourself
 
