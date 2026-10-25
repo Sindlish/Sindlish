@@ -86,7 +86,7 @@ exploratory prototypes carry `experiment` and are **not** committed to any miles
 | Pattern matching | `bhet x { haal 1 { ... } haal _ { ... } }` — literals, `_`, bindings, tuple destructuring |
 | Block expressions | `{ ... }` auto-yield last expr; `:`→dict, commas→set, else block; vars leak; `wapas` illegal inside |
 | Chaining comparisons | `a < b <= c`, mixed operators, method calls |
-| Compound assignment | `+= -= *= /= %= ^=` (power is `^`, so no `**`) |
+| Compound assignment / increment | `+= -= *= /= %= ^=` + `i++` `i--` (power is `^`, so no `**`) |
 | Slicing | `list[a:b:c]`, negative indices, copy not view, on fehrist/lafz/jori |
 | Unpacking | `a, b = [...]`, `a, *rest = [...]`, swap, strings unpack, eval-RHS-then-store |
 | String methods | 38, all Sindhi-named; `warha()`→fehrist, `gadh()` accepts fehrist or jori |
